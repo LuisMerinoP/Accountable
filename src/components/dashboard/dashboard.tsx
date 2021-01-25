@@ -5,17 +5,9 @@ import { connect } from 'react-redux';
 import { IProjectState } from '../../store/reducers/projectReducer';
 import { firestoreConnect, populate } from 'react-redux-firebase';
 import { compose } from 'redux';
+import PropTypes from 'prop-types'
 
 class Dashboard extends Component<IProjectState> {
-
-  // componentDidUpdate(prevProps:IProjectState, nextProps:IProjectState) {
-  //   if(prevProps !== this.props){
-  //     console.log("PREVIOUS")
-  //     console.log(prevProps);
-  //     console.log("next")
-  //     console.log(nextProps);
-  //   }
-  // }
 
   render() {
     const props = this.props;
