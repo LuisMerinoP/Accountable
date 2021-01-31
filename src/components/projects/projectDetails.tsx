@@ -1,22 +1,59 @@
-const ProjectDetails = (props:any) => {
-  const id = props.match.params.id;
-  return(
-    <div className="container section project-details">
-      <div className="card z-depth-0">
-        <div className="card-content">
-          <span className="card-title">Project Title - {id}</span>
-          <p>
-            I am looking for help concerning a little Unity3D problem I am facing. I am quite new to Unity, so there might be concepts I am ignorant of. I am running 2020.2.1f1.
-            If have a player character with a non-kinematic rigidbody that is being moved by pushing it along a lat ground with RigidBody.AddRelativeForce(). In the rigidbody's constraints section, I froze the X and Z rotation to keep it from falling over. This movement seems to work pretty well.
-          </p>
-        </div>
-        <div className="card-action grey lighten-4">
-          <div>Posted by Luis Metino</div>
-          <div>2n sept 2AM</div>
-        </div>
-      </div>
-    </div>
-  )
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { isConstructorDeclaration } from 'typescript';
+import { IProject } from '../../store/reducers/projectReducer';
+
+interface IExtendedProject extends IProject {
+  authorFirstName: string,
+  authorLastName: string,
+  authorId: number,
+  createdAt: Date
 }
 
-export default ProjectDetails;
+const ProjectDetails = (props:any) => {
+  //const id = props.match.params.id;
+  //const { project } = props; same destructuring without types
+  const project:IExtendedProject = props.project;
+  if (project) 
+    return(
+      <div className="container section project-details">
+        <div className="card z-depth-0">
+          <div className="card-content">
+            <span className="card-title">{project.title}</span>
+            <p>
+              {project.content}
+            </p>
+          </div>
+          <div className="card-action grey lighten-4">
+            <div>{project.authorFirstName} {project.authorLastName}</div>
+            <div>2n sept 2AM</div>
+          </div>
+        </div>
+      </div>
+    )
+  else {
+    return(
+      <div>
+        <p> Loading project... </p>
+      </div>
+    )
+  }
+  
+}
+
+const mapStateToProps = (state:any, ownProps:any) => {
+  const id = ownProps.match.params.id;
+  const projects = state.firestore.data.projects;
+  const project = projects ? projects[id] : null;
+  return {
+    project: project
+  }
+}
+
+export default compose<React.FunctionComponent>(
+  connect(mapStateToProps),
+  firestoreConnect([
+    { collection: 'projects' }
+  ])
+)(ProjectDetails);

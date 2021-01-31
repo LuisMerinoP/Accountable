@@ -24,3 +24,6 @@ export const createProject = (project:{title:string, content:string}) => {
     })
   }
 }
+
+
+
