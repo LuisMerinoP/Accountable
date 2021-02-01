@@ -5,10 +5,12 @@ import { firestoreReducer } from 'redux-firestore'
 import { firebaseReducer } from 'react-redux-firebase'
 
 
-export interface IAppState {
-  //readonly auth: any,
-  readonly project: IProjectState,
-}
+// export interface IAppState {
+//   readonly auth: typeof authReducer,
+//   readonly project: typeof projectReducer,
+//   readonly firebase: typeof firebaseReducer,
+//   readonly firestore: typeof firestoreReducer
+// }
 
 const rootReducer = combineReducers({
   auth: authReducer,

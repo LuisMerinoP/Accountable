@@ -7,11 +7,9 @@ const ProjectList = (props: IProjectState) => {
     <div className="project-list section">
       { props.projects && props.projects.map(project => {
         return (
-          <div key={project.id}>
-            <Link to={'/project/' + project.id}>
-              <ProjectSummary project={project} />
-            </Link>
-          </div>
+          <Link to={'/project/' + project.id} key={project.id}>
+            <ProjectSummary project={project} />
+          </Link>
         )
       })}  
     </div>

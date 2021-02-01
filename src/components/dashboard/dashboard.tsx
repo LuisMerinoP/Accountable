@@ -13,7 +13,6 @@ class Dashboard extends Component<IProjectState> {
   // }
 
   render() {
-    // const props = this.props;
     return (
       <div className="dashboard container">
         <div className="row">

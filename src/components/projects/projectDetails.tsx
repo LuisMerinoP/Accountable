@@ -15,7 +15,7 @@ const ProjectDetails = (props:any) => {
   //const id = props.match.params.id;
   //const { project } = props; same destructuring without types
   const project:IExtendedProject = props.project;
-  if (project) 
+  if (project) {
     return(
       <div className="container section project-details">
         <div className="card z-depth-0">
@@ -32,7 +32,7 @@ const ProjectDetails = (props:any) => {
         </div>
       </div>
     )
-  else {
+  } else {
     return(
       <div>
         <p> Loading project... </p>

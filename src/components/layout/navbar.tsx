@@ -4,6 +4,7 @@
 import SignedInLinks from './signedInLinks';
 import SignedOutLinks from './signedOutLinks';
 import M from 'materialize-css';
+import { connect } from 'react-redux';
 
 const NavBar = () => {
 
@@ -32,4 +33,10 @@ const NavBar = () => {
   )
 }
 
-export default NavBar;
+const mapStateToProps = (state:any) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps)(NavBar);

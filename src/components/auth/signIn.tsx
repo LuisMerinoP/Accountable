@@ -1,6 +1,17 @@
 import React, { BaseSyntheticEvent, Component } from 'react'
+import { connect } from 'react-redux';
+import { signIn } from '../../store/actions/authActions';
+import { ThunkDispatch } from "redux-thunk";
 
-class SignIn extends Component {
+interface IWithDispatchedProps {
+  signIn: (credentials: {email:string, password:string}) => void,
+}
+
+interface IWithStateProps extends IWithDispatchedProps {
+  authError: string
+}
+
+class SignIn extends Component<IWithStateProps> {
   state = {
     email:'',
     password:''
@@ -14,10 +25,11 @@ class SignIn extends Component {
 
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signIn(this.state);
   }
 
   render() {
+    const { authError } = this.props;
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -32,6 +44,9 @@ class SignIn extends Component {
           </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Login</button>
+            <div className="red-text center">
+              { authError ? <p>{authError}</p> : null }
+            </div>
           </div>
         </form> 
       </div>
@@ -39,4 +54,28 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn
+type AuthAction = {
+  type:string,
+  err?: unknown 
+}
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+
+const mapStateToProps = (state:any):any => {
+  return {
+    authError: state.auth.authError
+  }
+}
+
+const mapDispatchToProps = ( dispatch: ThunkDispatch<any, never, AuthAction> ): IWithDispatchedProps => {
+  return {
+    signIn: (credentials: LoginCredentials) => dispatch(signIn(credentials))
+  };
+};
+
+export default connect<React.FunctionComponent>(mapStateToProps, mapDispatchToProps)(SignIn)
+
