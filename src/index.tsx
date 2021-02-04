@@ -27,16 +27,18 @@ const rrfProps = {
   createFirestoreInstance
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-   <Provider store={store}>
-      <ReactReduxFirebaseProvider {...rrfProps}>
-        <App />
-      </ReactReduxFirebaseProvider>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+firebase.auth().onAuthStateChanged((user) => {
+  ReactDOM.render(
+    <React.StrictMode>
+    <Provider store={store}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <App />
+        </ReactReduxFirebaseProvider>
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+});
 
 
 
