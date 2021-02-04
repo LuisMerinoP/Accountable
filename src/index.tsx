@@ -5,12 +5,11 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './store/reducers/rootReducer';
+import { rootReducer } from './store/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk'
 import { createFirestoreInstance } from 'redux-firestore';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
-//import * as firebase from 'firebase'
 import { reduxFirebase as rfConfig } from './config/fbConfig';
 import firebase from 'firebase/app';
 
@@ -39,21 +38,6 @@ firebase.auth().onAuthStateChanged((user) => {
     document.getElementById('root')
   );
 });
-
-
-
-// firebase.auth().onAuthStateChanged((user) => {
-//   ReactDOM.render(
-//     <Provider store={store}>
-//       <ReactReduxFirebaseProvider {...rrfProps}>
-//         <App />
-//       </ReactReduxFirebaseProvider>
-//     </Provider>, 
-//     document.getElementById('root'));
-//   }
-// );
-
-
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -1,13 +1,14 @@
 import firebase from 'firebase/app'
 import { Dispatch } from 'react';
+import { LoginAction, SignOutAction } from './../types/authTypes';
 
-interface AuthAction {
-  type: string,
-  err?: unknown
-}
+// interface AuthAction {
+//   type: string,
+//   err?: unknown
+// }
 
 export const signIn = (credentials: {email:string, password:string}) => {
-  return (dispatch: Dispatch<AuthAction>) => {
+  return (dispatch: Dispatch<LoginAction>) => {
     firebase.auth().signInWithEmailAndPassword(
       credentials.email,
       credentials.password
@@ -20,7 +21,7 @@ export const signIn = (credentials: {email:string, password:string}) => {
 }
 
 export const signOut = () => {
-  return (dispatch: Dispatch<AuthAction>) => {
+  return (dispatch: Dispatch<SignOutAction>) => {
     firebase.auth().signOut().then(()=> {
       dispatch({ type: 'SIGNOUT_SUCCESS'});
     })

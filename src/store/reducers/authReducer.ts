@@ -1,12 +1,10 @@
-const initState = {
+import { AuthActionTypes } from './../../store/types/authTypes'
+
+const initState: { authError: string | null } = {
   authError: null
 };
 
-interface AuthAction {
-  type:string,
-  err?:unknown
-}
-const authReducer = (state = initState, action:AuthAction) => {
+export const authReducer = (state = initState, action:AuthActionTypes) => {
   switch (action.type) {
     case 'LOGIN_ERROR':
       console.log('login error');
@@ -27,5 +25,3 @@ const authReducer = (state = initState, action:AuthAction) => {
       return state
   }
 }
-
-export default authReducer;

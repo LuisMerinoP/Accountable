@@ -1,5 +1,5 @@
 import ProjectSummary from './projectSummary';
-import { IProjectState } from '../../store/reducers/projectReducer';
+import { IProjectState } from '../../store/types/projectTypes';
 import { Link } from 'react-router-dom';
 
 const ProjectList = (props: IProjectState) => {

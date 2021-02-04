@@ -4,9 +4,20 @@
 import SignedInLinks from './signedInLinks';
 import SignedOutLinks from './signedOutLinks';
 import M from 'materialize-css';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from './../../store/reducers/rootReducer';
 
-const NavBar = (props:any) => {
+const mapStateToProps = (state:RootState) => {
+  return {
+    auth: state.firebase.auth
+  }
+}
+
+const connector = connect(mapStateToProps);
+
+type Props = ConnectedProps<typeof connector>
+
+const NavBar = (props:Props) => {
   // $(document).ready(function(){
   $(function() {
     M.Sidenav.init($('.sidenav'));
@@ -31,10 +42,4 @@ const NavBar = (props:any) => {
   )
 }
 
-const mapStateToProps = (state:any) => {
-  return {
-    auth: state.firebase.auth
-  }
-}
-
-export default connect(mapStateToProps)(NavBar);
+export default connector(NavBar);

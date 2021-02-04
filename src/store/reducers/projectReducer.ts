@@ -1,12 +1,4 @@
-export interface IProject {
-  id: string,
-  title: string,
-  content: string
-}
-
-export interface IProjectState {
-  projects: IProject[]
-}
+import { ProjectActionTypes, IProjectState } from './../../store/types/projectTypes'
 
 const initState: IProjectState = {
   projects: [
@@ -16,16 +8,16 @@ const initState: IProjectState = {
   ]
 }
 
-type Action = {
-  type:string,
-  project:IProject,
-  err:unknown
-}
+// interface CreateProjectAction {
+//   type:string,
+//   project:IProject,
+//   err?:Error
+// }
 
-const projectReducer = (state = initState, action: Action) => {
+const projectReducer = (state = initState, action: ProjectActionTypes) => {
   switch (action.type) {
     case 'CREATE_PROJECT':
-      console.log('created project', action.project)
+      console.log('created project', action.project);
       return state;
     case 'CREATE_PROJECT_ERROR':
       console.log('create project error', action.err);

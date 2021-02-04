@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { isConstructorDeclaration } from 'typescript';
-import { IProject } from '../../store/reducers/projectReducer';
+import { IProject } from '../../store/types/projectTypes';
 
 interface IExtendedProject extends IProject {
   authorFirstName: string,
@@ -12,8 +11,6 @@ interface IExtendedProject extends IProject {
 }
 
 const ProjectDetails = (props:any) => {
-  //const id = props.match.params.id;
-  //const { project } = props; same destructuring without types
   const project:IExtendedProject = props.project;
   if (project) {
     return(

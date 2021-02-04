@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Notifications from './notifications';
 import ProjectList from '../projects/projectList';
 import { connect } from 'react-redux';
-import { IProjectState } from '../../store/reducers/projectReducer';
+import { IProjectState } from '../../store/types/projectTypes';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 

@@ -1,4 +1,4 @@
-import { IProject } from "../../store/reducers/projectReducer";
+import { IProject } from "../../store/types/projectTypes";
 
 const ProjectSummary = ( prop : { project: IProject } ) => {
   return (

@@ -1,17 +1,36 @@
 import React, { BaseSyntheticEvent, Component } from 'react'
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { signIn } from '../../store/actions/authActions';
-import { ThunkDispatch } from "redux-thunk";
+import { ThunkDispatch  } from "redux-thunk";
+import { RootState } from './../../store/reducers/rootReducer';
 
-interface IWithDispatchedProps {
-  signIn: (credentials: {email:string, password:string}) => void,
+type AuthAction = {
+  type:string,
+  err?: unknown 
 }
 
-interface IWithStateProps extends IWithDispatchedProps {
-  authError: string
+interface LoginCredentials {
+  email: string;
+  password: string;
 }
 
-class SignIn extends Component<IWithStateProps> {
+const mapStateToProps = (state:RootState) => {
+  return {
+    authError: state.auth.authError
+  }
+}
+
+const mapDispatchToProps = ( dispatch: ThunkDispatch<any, never, AuthAction> ) => {
+  return {
+    signIn: (credentials: LoginCredentials) => dispatch(signIn(credentials))
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+type Props = ConnectedProps<typeof connector>
+
+class SignIn extends Component<Props> {
   state = {
     email:'',
     password:''
@@ -54,28 +73,6 @@ class SignIn extends Component<IWithStateProps> {
   }
 }
 
-type AuthAction = {
-  type:string,
-  err?: unknown 
-}
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-
-const mapStateToProps = (state:any):any => {
-  return {
-    authError: state.auth.authError
-  }
-}
-
-const mapDispatchToProps = ( dispatch: ThunkDispatch<any, never, AuthAction> ): IWithDispatchedProps => {
-  return {
-    signIn: (credentials: LoginCredentials) => dispatch(signIn(credentials))
-  };
-};
-
-export default connect<React.FunctionComponent>(mapStateToProps, mapDispatchToProps)(SignIn)
+//export default connect<React.FunctionComponent>(mapStateToProps, mapDispatchToProps)(SignIn)
+export default connector(SignIn);
 
