@@ -6,17 +6,23 @@ interface AuthAction {
   err?: unknown
 }
 
-
-
 export const signIn = (credentials: {email:string, password:string}) => {
   return (dispatch: Dispatch<AuthAction>) => {
     firebase.auth().signInWithEmailAndPassword(
       credentials.email,
       credentials.password
     ).then(() => {
-      dispatch({ type: 'LOGIN_SUCCESS'})
+      dispatch({ type: 'LOGIN_SUCCESS'});
     }).catch((err) => {
-      dispatch({ type: 'LOGIN_ERROR', err})
+      dispatch({ type: 'LOGIN_ERROR', err});
     });
+  }
+}
+
+export const signOut = () => {
+  return (dispatch: Dispatch<AuthAction>) => {
+    firebase.auth().signOut().then(()=> {
+      dispatch({ type: 'SIGNOUT_SUCCESS'});
+    })
   }
 }

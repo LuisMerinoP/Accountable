@@ -6,13 +6,13 @@ import SignedOutLinks from './signedOutLinks';
 import M from 'materialize-css';
 import { connect } from 'react-redux';
 
-const NavBar = () => {
-
+const NavBar = (props:any) => {
   // $(document).ready(function(){
   $(function() {
     M.Sidenav.init($('.sidenav'));
   });
-
+  const { auth } = props
+  const links = auth.uid ? <SignedInLinks/> : <SignedOutLinks/>
   return (
     <nav className="nav-wrapper grey darken-3">
       <div className="container">   
@@ -21,12 +21,10 @@ const NavBar = () => {
           <i className="material-icons">menu</i>
         </a>
         <ul className="right hide-on-med-and-down">
-          <SignedInLinks/>
-          <SignedOutLinks />
+          {links}
         </ul>
         <ul className="sidenav grey lighten-2" id="mobile-menu">
-          <SignedInLinks />
-          <SignedOutLinks />
+         {links}
         </ul>
       </div>
     </nav>
@@ -35,7 +33,7 @@ const NavBar = () => {
 
 const mapStateToProps = (state:any) => {
   return {
-
+    auth: state.firebase.auth
   }
 }
 
