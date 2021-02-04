@@ -1,26 +1,36 @@
 import { Component } from 'react';
 import Notifications from './notifications';
 import ProjectList from '../projects/projectList';
-import { connect } from 'react-redux';
-import { IProjectState } from '../../store/types/projectTypes';
+import { connect, ConnectedProps } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { RootState } from '../../store/reducers/rootReducer';
+import { Redirect } from 'react-router-dom';
 
-class Dashboard extends Component<IProjectState> {
-  // async getMarker() {
-  //   const snapshot = await firebase.firestore().collection('projects').get();
-  //   return snapshot.docs.map(doc => doc.data());
-  // }
+const mapStateToProps = (state: RootState) => {
+  return {
+    projects: state.firestore.ordered.projects,
+    auth: state.firebase.auth
+  } 
+}
 
+const connector = connect(mapStateToProps);
+type Props = ConnectedProps<typeof connector>
+
+class Dashboard extends Component<Props> {
+ 
   render() {
+    const { auth, projects } = this.props;
+    if (!auth.uid) return <Redirect to='/signin'/>
+    
     return (
       <div className="dashboard container">
         <div className="row">
           <div className="col s12 m6">
-            <ProjectList projects={this.props.projects}/>
+          <ProjectList projects={projects}/>
             </div>
           <div className="col s12 m5 offset-m1">
-            <Notifications />
+          <Notifications />
           </div>
         </div>
       </div>
@@ -28,15 +38,8 @@ class Dashboard extends Component<IProjectState> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  console.log(state);
-  return {
-    projects: state.firestore.ordered.projects
-  } 
-}
-
 export default compose<React.FunctionComponent>(
-  connect(mapStateToProps),
+  connector,
   firestoreConnect([
     { collection: 'projects' }
   ])
