@@ -18,11 +18,9 @@ const connector = connect(mapStateToProps);
 type Props = ConnectedProps<typeof connector>
 
 class Dashboard extends Component<Props> {
- 
   render() {
-    const { auth, projects } = this.props;
+    const { projects, auth } = this.props;
     if (!auth.uid) return <Redirect to='/signin'/>
-    
     return (
       <div className="dashboard container">
         <div className="row">
@@ -44,16 +42,3 @@ export default compose<React.FunctionComponent>(
     { collection: 'projects' }
   ])
 )(Dashboard);
-
-// const withPopulatedProjects = compose<React.FunctionComponent>(
-//   firestoreConnect(props => [
-//     {
-//       collection:'projects',
-//     },
-//   ]),
-//   connect((state:any, props) => ({
-//     projects: state.firestore.ordered.projects
-//   })),
-// );
-
-// export default withPopulatedProjects(Dashboard);

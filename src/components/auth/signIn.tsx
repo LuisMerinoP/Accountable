@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { signIn } from '../../store/actions/authActions';
 import { ThunkDispatch  } from "redux-thunk";
 import { RootState } from './../../store/reducers/rootReducer';
+import { Redirect } from 'react-router-dom';
 
 type AuthAction = {
   type:string,
@@ -16,7 +17,8 @@ interface LoginCredentials {
 
 const mapStateToProps = (state:RootState) => {
   return {
-    authError: state.auth.authError
+    authError: state.auth.authError,
+    auth: state.firebase.auth
   }
 }
 
@@ -48,7 +50,8 @@ class SignIn extends Component<Props> {
   }
 
   render() {
-    const { authError } = this.props;
+    const { authError, auth } = this.props;
+    if (auth.uid) return <Redirect to='/'/>
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -73,6 +76,5 @@ class SignIn extends Component<Props> {
   }
 }
 
-//export default connect<React.FunctionComponent>(mapStateToProps, mapDispatchToProps)(SignIn)
 export default connector(SignIn);
 

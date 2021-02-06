@@ -1,7 +1,9 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { IProject } from '../../store/types/projectTypes';
+import { RootState } from '../../store/reducers/rootReducer';
+import { Redirect } from 'react-router-dom';
 
 interface IExtendedProject extends IProject {
   authorFirstName: string,
@@ -10,8 +12,23 @@ interface IExtendedProject extends IProject {
   createdAt: Date
 }
 
-const ProjectDetails = (props:any) => {
+const mapStateToProps = (state:RootState, ownProps:any) => {
+  const id = ownProps.match.params.id;
+  const projects = state.firestore.data.projects;
+  const project = projects ? projects[id] : null;
+  return {
+    project: project,
+    auth: state.firebase.auth    
+  }
+}
+
+const connector = connect(mapStateToProps);
+type Props = ConnectedProps<typeof connector> 
+
+const ProjectDetails = (props:Props) => {
   const project:IExtendedProject = props.project;
+  const { auth } = props
+  if (!auth.uid) return <Redirect to='/'/>
   if (project) {
     return(
       <div className="container section project-details">
@@ -36,20 +53,10 @@ const ProjectDetails = (props:any) => {
       </div>
     )
   }
-  
-}
-
-const mapStateToProps = (state:any, ownProps:any) => {
-  const id = ownProps.match.params.id;
-  const projects = state.firestore.data.projects;
-  const project = projects ? projects[id] : null;
-  return {
-    project: project
-  }
 }
 
 export default compose<React.FunctionComponent>(
-  connect(mapStateToProps),
+  connector,
   firestoreConnect([
     { collection: 'projects' }
   ])

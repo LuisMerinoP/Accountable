@@ -1,6 +1,18 @@
 import React, { BaseSyntheticEvent, Component } from 'react'
+import { RootState } from '../../store/reducers/rootReducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-class SignUp extends Component {
+const mapStateToProps = (state: RootState) => {
+  return {
+    auth: state.firebase.auth
+  }
+}
+
+const connector = connect(mapStateToProps)
+type Props = ConnectedProps<typeof connector>
+
+class SignUp extends Component<Props> {
   state = {
     email:'',
     password:'',
@@ -20,6 +32,8 @@ class SignUp extends Component {
   }
 
   render() {
+    const { auth } = this.props;
+    if (auth.uid) return <Redirect to='/' />
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -49,4 +63,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp
+export default connector(SignUp)

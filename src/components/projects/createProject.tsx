@@ -1,12 +1,25 @@
 import { BaseSyntheticEvent, Component } from 'react'
-import {connect} from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import {createProject} from '../../store/actions/projectActions';
+import { RootState } from '../../store/reducers/rootReducer';
+import { Redirect } from 'react-router-dom';
 
-interface IExtendedProps {
-  createProject: (state: {title:string, content:string} ) => {}
+const mapDispatchToProps = (dispatch:any) => {
+  return {
+    createProject: (project: {title:string, content:string} ) => dispatch(createProject(project))
+  }
 }
 
-class CreateProject extends Component<IExtendedProps> {
+const mapStateToProps = (state: RootState) => {
+  return {
+    auth: state.firebase.auth
+  }
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type Props = ConnectedProps<typeof connector>
+
+class CreateProject extends Component<Props> {
   state = {
     title:'',
     content:''
@@ -20,11 +33,12 @@ class CreateProject extends Component<IExtendedProps> {
 
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
-    //console.log(this.state);
     this.props.createProject(this.state);
   }
 
   render() {
+    const { auth } = this.props
+    if (!auth.uid) return <Redirect to='/'/>
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -46,10 +60,4 @@ class CreateProject extends Component<IExtendedProps> {
   }
 }
 
-const mapDispatchToProps = (dispatch:any) => {
-  return {
-    createProject: (project: {title:string, content:string} ) => dispatch(createProject(project))
-  }
-}
-
-export default connect(null, mapDispatchToProps)(CreateProject)
+export default connector(CreateProject);

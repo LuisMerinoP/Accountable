@@ -2,11 +2,6 @@ import firebase from 'firebase/app'
 import { Dispatch } from 'react';
 import { LoginAction, SignOutAction } from './../types/authTypes';
 
-// interface AuthAction {
-//   type: string,
-//   err?: unknown
-// }
-
 export const signIn = (credentials: {email:string, password:string}) => {
   return (dispatch: Dispatch<LoginAction>) => {
     firebase.auth().signInWithEmailAndPassword(
