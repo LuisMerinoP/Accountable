@@ -2,18 +2,21 @@ import React, { BaseSyntheticEvent, Component } from 'react'
 import { RootState } from '../../store/reducers/rootReducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { signUp } from '../../store/actions/authActions';
+import { UserData } from './../../store/types/authTypes'  
 
 const mapStateToProps = (state: RootState) => {
   return {
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    authError: state.auth.authError
   }
 }
 
-const connector = connect(mapStateToProps)
+const connector = connect(mapStateToProps, {signUp});
 type Props = ConnectedProps<typeof connector>
 
 class SignUp extends Component<Props> {
-  state = {
+  state: UserData = {
     email:'',
     password:'',
     firstName:'',
@@ -21,6 +24,7 @@ class SignUp extends Component<Props> {
   }
 
   handleChange = (e:BaseSyntheticEvent) => {
+    //set the local state to the component
     this.setState({
       [e.target.id]: e.target.value
     });
@@ -28,11 +32,11 @@ class SignUp extends Component<Props> {
 
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
-    console.log(this.state);
+    this.props.signUp(this.state);
   }
 
   render() {
-    const { auth } = this.props;
+    const { auth, authError } = this.props;
     if (auth.uid) return <Redirect to='/' />
     return (
       <div className="container">
@@ -56,6 +60,9 @@ class SignUp extends Component<Props> {
           </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Sign Up</button>
+            <div className="red-text center">
+              { authError ? <p>{authError}</p> : null }
+            </div>
           </div>
         </form> 
       </div>

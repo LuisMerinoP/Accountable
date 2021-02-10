@@ -17,8 +17,8 @@ interface LoginCredentials {
 
 const mapStateToProps = (state:RootState) => {
   return {
-    authError: state.auth.authError,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    authError: state.auth.authError
   }
 }
 
@@ -29,7 +29,6 @@ const mapDispatchToProps = ( dispatch: ThunkDispatch<any, never, AuthAction> ) =
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
-
 type Props = ConnectedProps<typeof connector>
 
 class SignIn extends Component<Props> {

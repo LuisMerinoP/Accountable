@@ -1,6 +1,6 @@
 import { BaseSyntheticEvent, Component } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
-import {createProject} from '../../store/actions/projectActions';
+import { createProject } from '../../store/actions/projectActions';
 import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
 
