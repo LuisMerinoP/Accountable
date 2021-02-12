@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
 import firebase from 'firebase/app';
-import { CreateProjectAction } from './../../store/types/projectTypes'
+import { CreateProjectAction } from './../../store/types/projectTypes';
 
 export const createProject = (project:{title:string, content:string}) => {
   return (dispatch:Dispatch<CreateProjectAction>, getState:any) => {

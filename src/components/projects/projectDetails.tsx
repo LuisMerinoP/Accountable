@@ -1,16 +1,10 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { IProject } from '../../store/types/projectTypes';
+import { IFirebaseProject } from '../../store/types/projectTypes';
 import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
-
-interface IExtendedProject extends IProject {
-  authorFirstName: string,
-  authorLastName: string,
-  authorId: number,
-  createdAt: Date
-}
+import moment from 'moment';
 
 const mapStateToProps = (state:RootState, ownProps:any) => {
   const id = ownProps.match.params.id;
@@ -26,7 +20,7 @@ const connector = connect(mapStateToProps);
 type Props = ConnectedProps<typeof connector> 
 
 const ProjectDetails = (props:Props) => {
-  const project:IExtendedProject = props.project;
+  const project:IFirebaseProject = props.project;
   const { auth } = props
   if (!auth.uid) return <Redirect to='/'/>
   if (project) {
@@ -41,7 +35,7 @@ const ProjectDetails = (props:Props) => {
           </div>
           <div className="card-action grey lighten-4">
             <div>{project.authorFirstName} {project.authorLastName}</div>
-            <div>2n sept 2AM</div>
+            <div>{moment(project.createdAt.toDate()).calendar()}</div>
           </div>
         </div>
       </div>

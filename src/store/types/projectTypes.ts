@@ -1,3 +1,4 @@
+import firebase from 'firebase/app';
 
 export const CREATE_PROJECT = 'CREATE_PROJECT'
 export const CREATE_PROJECT_ERROR = 'CREATE_PROJECT_ERROR'
@@ -32,7 +33,7 @@ export interface IFirebaseProject {
   authorId: string,
   authorLastName: string
   content: string
-  createdAt: Date
+  createdAt: firebase.firestore.Timestamp //firebase timestamp
   title: string
 }
 
