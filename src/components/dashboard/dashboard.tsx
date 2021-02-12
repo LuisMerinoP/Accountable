@@ -13,18 +13,16 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const connector = connect(mapStateToProps);
-type Props = ConnectedProps<typeof connector>
+type Props = ConnectedProps<typeof connector>;
 
 class Dashboard extends Component<Props> {
   render() {
     const { auth } = this.props;
-    console.log("rendered");
     if (!auth.uid) return <Redirect to='/signin'/>
     return (
       <div className="dashboard container">
         <div className="row">
           <div className="col s12 m6">
-          {/* projects={projects}/> */}
           <ProjectList /> 
             </div>
           <div className="col s12 m5 offset-m1">

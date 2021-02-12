@@ -13,13 +13,12 @@ const ProjectList = () => {
       .collection("projects")
       .onSnapshot((snapshot) => {
         let changes = snapshot.docChanges();
-        changes.forEach(change => {console.log(change.doc.data())})
+        // changes.forEach(change => {console.log(change.doc.data())})
         const fbProjects = changes.map((change) => ({
           id: change.doc.id,
           ...change.doc.data()
         }) as IFirebaseProject);
         fbProjects.forEach( fbProject => data.push(fbProject))
-        // spreading the data here did solve my problem
         setProjects([...data]);
       });
   }, []);
