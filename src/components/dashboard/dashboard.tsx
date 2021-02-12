@@ -2,10 +2,9 @@ import { Component } from 'react';
 import Notifications from './notifications';
 import ProjectList from '../projects/projectList';
 import { connect, ConnectedProps } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import { compose } from 'redux';
 import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
+import firebase from 'firebase/app';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -17,9 +16,58 @@ const mapStateToProps = (state: RootState) => {
 const connector = connect(mapStateToProps);
 type Props = ConnectedProps<typeof connector>
 
+interface IFirebaseProject {
+  id: string,
+  authorFirstName: string,
+  authorId: string,
+  authorLastName: string
+  content: string
+  createdAt: Date
+  title: string
+}
+
+interface InitDashboardState {
+  firebaseProjects: IFirebaseProject[]
+}
+
 class Dashboard extends Component<Props> {
+  _isMounted = false;
+  async getFirebaseProjects() {
+    const snapshot = await firebase.firestore().collection('projects').get();
+    return snapshot.docs.map( (doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  }
+
+  state:InitDashboardState = {
+    firebaseProjects: []
+  }
+  
+  componentDidMount() {
+    this._isMounted = true;
+    this.getFirebaseProjects().then((resp) => {
+      if (this._isMounted) {
+        this.setState({
+          firebaseProjects: resp
+        });
+        console.log(this.state.firebaseProjects);
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
-    const { projects, auth } = this.props;
+    const { auth } = this.props;
+    const projects = this.state.firebaseProjects.map(project => ({
+      id: project.id,
+      title: project.title,
+      content: project.content
+    }));
+    console.log("rendered"); ;
     if (!auth.uid) return <Redirect to='/signin'/>
     return (
       <div className="dashboard container">
@@ -36,9 +84,4 @@ class Dashboard extends Component<Props> {
   }
 }
 
-export default compose<React.FunctionComponent>(
-  connector,
-  firestoreConnect([
-    { collection: 'projects' }
-  ])
-)(Dashboard);
+export default connector(Dashboard);
