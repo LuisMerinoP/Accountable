@@ -10,7 +10,7 @@ export interface IProject {
 }
 
 export interface IProjectState {
-  projects: IProject[]
+  projects: IProject[] | null
 }
 
 export interface CreateProjectAction {
@@ -24,6 +24,16 @@ interface DeleteProjectAction {
   type: typeof DELETE_PROJECT
   project: IProject,
   err?: Error
+}
+
+export interface IFirebaseProject {
+  id: string,
+  authorFirstName: string,
+  authorId: string,
+  authorLastName: string
+  content: string
+  createdAt: Date
+  title: string
 }
 
 export type ProjectActionTypes = CreateProjectAction | DeleteProjectAction

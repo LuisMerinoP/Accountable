@@ -1,11 +1,32 @@
 import ProjectSummary from './projectSummary';
-import { IProjectState } from '../../store/types/projectTypes';
+import { IFirebaseProject } from '../../store/types/projectTypes';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import firebase from 'firebase/app';
 
-const ProjectList = (props: IProjectState) => {
+const ProjectList = () => {
+  const [projects, setProjects] = useState<IFirebaseProject[]>();
+  useEffect(() => {
+    let data:IFirebaseProject[] = [];
+    firebase
+      .firestore()
+      .collection("projects")
+      .onSnapshot((snapshot) => {
+        let changes = snapshot.docChanges();
+        changes.forEach(change => {console.log(change.doc.data())})
+        const fbProjects = changes.map((change) => ({
+          id: change.doc.id,
+          ...change.doc.data()
+        }) as IFirebaseProject);
+        fbProjects.forEach( fbProject => data.push(fbProject))
+        // spreading the data here did solve my problem
+        setProjects([...data]);
+      });
+  }, []);
+
   return(
     <div className="project-list section">
-      { props.projects && props.projects.map(project => {
+      { projects && projects.map( project => {
         return (
           <Link to={'/project/' + project.id} key={project.id}>
             <ProjectSummary project={project} />
