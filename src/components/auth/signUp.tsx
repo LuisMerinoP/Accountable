@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, Component } from 'react'
+import { BaseSyntheticEvent, Component } from 'react'
 import { RootState } from '../../store/reducers/rootReducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { Redirect } from 'react-router-dom';
