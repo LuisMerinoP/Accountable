@@ -23,19 +23,11 @@ const ProjectList = () => {
             } as IFirebaseProject);
             console.log('ADDED', {...change.doc.data()});
           } else if (change.type === "removed") {
-            // const removeIndex = projects.map(function(project) { return project.id; }).indexOf(change.doc.id);
-            // projects.splice(removeIndex, 1);
             const removeIndex = data.map(function(project) { return project.id; }).indexOf(change.doc.id);
             data.splice(removeIndex,1)
             console.log('REMOVED')
           }
         });
-        // const fbProjects = changes.map((change) => ({
-        //   id: change.doc.id,
-        //   ...change.doc.data()
-        // }) as IFirebaseProject);
-        //fbProjects.forEach( fbProject => data.push(fbProject))
-
       setProjects([...data]);
       console.log('projects set');  
     });
@@ -47,10 +39,6 @@ const ProjectList = () => {
   }, []);
 
   const projectDelete = (project: IFirebaseProject ) => {
-    //delete from local status
-    // const removeIndex = projects.map(function(project) { return project.id; }).indexOf(project.id);
-    // projects.splice(removeIndex, 1);
-    //delete from firebase
     const db = firebase.firestore();
     db.collection('projects')
       .doc(project.id)
