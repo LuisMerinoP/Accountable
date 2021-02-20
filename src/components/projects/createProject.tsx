@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { createProject } from '../../store/actions/projectActions';
 import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
+import { RouteComponentProps } from "react-router-dom";
 
 const mapDispatchToProps = (dispatch:any) => {
   return {
@@ -17,7 +18,7 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-type Props = ConnectedProps<typeof connector>
+type Props = ConnectedProps<typeof connector> & RouteComponentProps
 
 class CreateProject extends Component<Props> {
   state = {
@@ -34,6 +35,7 @@ class CreateProject extends Component<Props> {
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
     this.props.createProject(this.state);
+    this.props.history.push('/');
   }
 
   render() {
