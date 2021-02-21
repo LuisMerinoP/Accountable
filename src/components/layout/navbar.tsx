@@ -24,6 +24,10 @@ const NavBar = (props:Props) => {
   // $(document).ready(function(){
   $(function() {
     M.Sidenav.init($('.sidenav'));
+    $('.sidenav').sidenav()
+    .on('click tap', 'li', () => {
+        $('.sidenav').sidenav('close');
+    });
   });
   const { auth, profile } = props
   const links = auth.uid ? <SignedInLinks profile={profile}/> : <SignedOutLinks/>

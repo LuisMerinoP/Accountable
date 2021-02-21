@@ -1,24 +1,10 @@
 import { BaseSyntheticEvent, Component } from 'react'
-import { connect, ConnectedProps } from 'react-redux';
-import { createProject } from '../../store/actions/projectActions';
-import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router-dom";
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
-const mapDispatchToProps = (dispatch:any) => {
-  return {
-    createProject: (project: {title:string, content:string} ) => dispatch(createProject(project))
-  }
-}
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    auth: state.firebase.auth
-  }
-}
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type Props = ConnectedProps<typeof connector> & RouteComponentProps
+type Props = typeof firebase.auth & RouteComponentProps
 
 class CreateProject extends Component<Props> {
   state = {
@@ -32,15 +18,35 @@ class CreateProject extends Component<Props> {
     });
   }
 
+  createProject = (project:{title:string, content:string}) => {
+    // make async call to database
+    const db = firebase.firestore();
+    db.collection('projects').add({
+      ...project,
+      authorFirstName: 'Net',
+      authorLastName: 'Ninja',
+      authorId: 12345,
+      createdAt: new Date()
+      }).then(() => {
+        console.log('project created')
+    }).catch((err:Error) => {
+        console.log('project create error: ', err );
+    })
+  }
+
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
-    this.props.createProject(this.state);
+    this.createProject(this.state);
     this.props.history.push('/');
   }
 
+  userStatus = { isUserLoggedIn: false};
+
   render() {
-    const { auth } = this.props
-    if (!auth.uid) return <Redirect to='/'/>
+    // const auth = firebase.auth;
+    // if (!auth.uid) return <Redirect to='/'/>
+    const user = firebase.auth().currentUser;
+    if (!user) return <Redirect to='/'/>
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -62,4 +68,6 @@ class CreateProject extends Component<Props> {
   }
 }
 
-export default connector(CreateProject);
+
+
+export default CreateProject;

@@ -1,8 +1,6 @@
 import { IFirebaseProject } from "../../store/types/projectTypes";
 import moment from 'moment';
 
-// (e) => { handleProjectDelete(e, prop.project) }
-
 const ProjectSummary = ( props : { project: IFirebaseProject, deleteCallback: any }) => {
   return (
     <div className="card z-depth-0 project-summary">
