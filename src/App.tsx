@@ -20,7 +20,8 @@ function App() {
             path='/project/:id'
             render={({ location }: {location: Location<{project: IFirebaseProject}>})  => {
                 const { state } = location;
-                return <ProjectDetails project={state.project} />
+                const returnedComponent = state ? <ProjectDetails project={state.project} /> : <ProjectDetails project={undefined}/>;
+                return returnedComponent;
             }}
           />
           <Route path='/signin' component={SignIn}/>

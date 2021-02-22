@@ -12,7 +12,6 @@ function fillFbDataIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
         id: change.doc.id,
         ...change.doc.data()
       } as IFirebaseProject);
-      // console.log('ADDED', {...change.doc.data()});
     } else if (change.type === "removed") {
       const removeIndex = data.map(function(project) { return project.id; }).indexOf(change.doc.id);
       data.splice(removeIndex,1);
