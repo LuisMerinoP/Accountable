@@ -43,8 +43,6 @@ class CreateProject extends Component<Props> {
   userStatus = { isUserLoggedIn: false};
 
   render() {
-    // const auth = firebase.auth;
-    // if (!auth.uid) return <Redirect to='/'/>
     const user = firebase.auth().currentUser;
     if (!user) return <Redirect to='/'/>
     return (

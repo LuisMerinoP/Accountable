@@ -59,8 +59,14 @@ const ProjectList = () => {
   return(
     <div className="project-list section">
       { projects && projects.map( project => {
+        const path = '/project/' + project.id;
         return (
-          <Link to={'/project/' + project.id} key={project.id}>
+          <Link to={{
+            pathname:path, 
+            state: {
+              project
+            },
+          }} key={project.id}>
             <ProjectSummary project={project} deleteCallback={projectDelete}/>
           </Link>
         )

@@ -1,7 +1,7 @@
 import { IFirebaseProject } from "../../store/types/projectTypes";
 import moment from 'moment';
 
-const ProjectSummary = ( props : { project: IFirebaseProject, deleteCallback: any }) => {
+const ProjectSummary = ( props : { project: IFirebaseProject, deleteCallback: (project: IFirebaseProject) => void }) => {
   return (
     <div className="card z-depth-0 project-summary">
       <div className="card-content grey-text text-darken-3">
