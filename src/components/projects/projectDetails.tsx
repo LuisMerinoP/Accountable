@@ -11,7 +11,7 @@ async function getFbProject(id: string) {
   await fbDoc.get().then(function(doc) {
       if (doc.exists) {
           console.log("Document data:", doc.data());
-          project = { ...doc.data()} as IFirebaseProject;
+          project = {...doc.data()} as IFirebaseProject;
       } else {
           console.log(`Document does not exist ${id}`);
       }
@@ -34,6 +34,12 @@ const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: 
   const [stateProject, setStateProject] = useState<IFirebaseProject | undefined>(project);
   if (!firebase.auth().currentUser) return <Redirect to='/'/>
   if (stateProject) {
+    const isTimestampInstance = stateProject?.createdAt instanceof firebase.firestore.Timestamp;
+    const toDateString = isTimestampInstance ? 
+      moment(stateProject.createdAt.toDate()).calendar() :
+      moment(new firebase.firestore.Timestamp(
+        stateProject.createdAt.seconds, 
+        stateProject.createdAt.nanoseconds).toDate()).calendar();
     return(
       <div className="container section project-details">
         <div className="card z-depth-0">
@@ -45,7 +51,7 @@ const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: 
           </div>
           <div className="card-action grey lighten-4">
             <div>{stateProject.authorFirstName} {stateProject.authorLastName}</div>
-            <div>{moment(stateProject.createdAt.toDate()).calendar()}</div>
+            <div>{toDateString}</div>
           </div>
         </div>
       </div>

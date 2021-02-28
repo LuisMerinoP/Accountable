@@ -26,7 +26,7 @@ class CreateProject extends Component<Props> {
       authorFirstName: 'Net',
       authorLastName: 'Ninja',
       authorId: 12345,
-      createdAt: new Date()
+      createdAt: firebase.firestore.Timestamp.fromDate(new Date())
       }).then(() => {
         console.log('project created')
     }).catch((err:Error) => {

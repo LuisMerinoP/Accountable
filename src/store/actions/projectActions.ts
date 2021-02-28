@@ -11,7 +11,7 @@ export const createProject = (project:{title:string, content:string}) => {
       authorFirstName: 'Net',
       authorLastName: 'Ninja',
       authorId: 12345,
-      createdAt: new Date()
+      createdAt: firebase.firestore.Timestamp.fromDate(new Date())
       }).then(() => {
       dispatch({ type:'CREATE_PROJECT', project});
     }).catch((err:Error) => {
