@@ -16,9 +16,15 @@ async function getAppointments() {
     querySnapshot.docs.forEach((document) => {
       console.log(document);
       const areEqual = document.id.replace(/\s+/g, '') === userId
-      console.log(`${document.id.replace(/\s+/g, '')} and ${userId} areequal: ${areEqual}`);
-      console.log(document.id.replace(/\s+/g, '').length);
-      console.log(userId?.length);
+      if (areEqual) {
+        document.ref.collection("appointment").get().then((querySnapshot) => {
+          querySnapshot.docs.forEach(appointment => {
+            const data  = appointment.data();
+            const timeStamp = new firebase.firestore.Timestamp(data.dateTime.seconds, data.dateTime.nanoseconds);
+            console.log(timeStamp.toDate());
+          });
+        });
+      }
     });
   });
 
