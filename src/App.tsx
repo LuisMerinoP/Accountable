@@ -17,13 +17,7 @@ function App() {
         <Switch>
           <Route exact path='/' component={Dashboard}/>
           <Route
-            path='/project/:id'
-            render={({ location }: {location: Location<{project: IFirebaseProject}>})  => {
-                const { state } = location;
-                const returnedComponent = state ? <ProjectDetails project={state.project} /> : <ProjectDetails project={undefined}/>;
-                return returnedComponent;
-            }}
-          />
+            path='/project/:id' component={ProjectDetails}/>
           <Route path='/signin' component={SignIn}/>
           <Route path='/signup' component={SignUp}/>
           <Route path='/create' component={CreateProject}/>

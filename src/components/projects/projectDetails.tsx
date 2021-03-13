@@ -1,49 +1,27 @@
-import { IFirebaseProject } from '../../store/types/projectTypes';
-import { Redirect } from 'react-router-dom';
+
+import { Redirect, useParams } from 'react-router-dom';
 import moment from 'moment';
-import firebase from 'firebase/app';
-import { useState } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import Toggle from '../toggle/toggle';
+import { IFirebaseProject } from '../../store/types/projectTypes';
+import firebase from 'firebase/app';
+import useProject from '../../data/useProject';
 
-async function getFbProject(id: string) {
-  const db = firebase.firestore();
-  const fbDoc = db.collection("projects").doc(id);
-  let project = {} as IFirebaseProject;
-  await fbDoc.get().then(function(doc) {
-      if (doc.exists) {
-          console.log("Document data:", doc.data());
-          project = {...doc.data()} as IFirebaseProject;
-      } else {
-          console.log(`Document does not exist ${id}`);
-      }
-  }).catch(function(error) {
-      console.log(`Error getting document: ${id}`, error);
-  });
-
-  return project;
-}
-
-function getProjectId():string {
-  const pathStr = window.location.pathname.toString();
-  const parts = pathStr.split("/");
-  const projStrIndex = parts.indexOf('project');
-  const projectId = parts[projStrIndex + 1];
-  return projectId;
-}
-
-const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: undefined }) => {
+const ProjectDetails = () => {
+  const { id } = useParams<{ id: string }>(); 
+  const project = useProject(id ?? "");
   const [stateProject, setStateProject] = useState<IFirebaseProject | undefined>(project);
+  
+  useEffect(() => {
+    setStateProject(project);
+  }, [project]);
+
+  //toggle dummy trial
   const [active, setActive] = useState(false);
   let projectActiveString = 'Project Active: ' + active.toString().toUpperCase(); 
 
   if (!firebase.auth().currentUser) return <Redirect to='/'/>
   if (stateProject) {
-    const isTimestampInstance = stateProject?.createdAt instanceof firebase.firestore.Timestamp;
-    const toDateString = isTimestampInstance ? 
-      moment(stateProject.createdAt.toDate()).calendar() :
-      moment(new firebase.firestore.Timestamp(
-        stateProject.createdAt.seconds, 
-        stateProject.createdAt.nanoseconds).toDate()).calendar();
     return(
       <div className="container section project-details">
         <div className="card z-depth-0">
@@ -55,7 +33,7 @@ const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: 
           </div>
           <div className="card-action grey lighten-4">
             <div>{stateProject.authorFirstName} {stateProject.authorLastName}</div>
-            <div>{toDateString}</div>
+            <div>{moment(stateProject.createdAt.toDate()).calendar()}</div>
           </div>
         </div>
         <div>
@@ -65,14 +43,6 @@ const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: 
       </div>
     )
   } else {
-    //fetch project
-    const projectId = getProjectId();
-    getFbProject(projectId).then((project) => { 
-      if (project) {
-        setStateProject(project);
-      }
-    });
-
     return(
       <div>
         <p> Loading project... </p>
