@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 import firebase from 'firebase/app';
 import { useState } from 'react'; 
+import Toggle from '../toggle/toggle';
 
 async function getFbProject(id: string) {
   const db = firebase.firestore();
@@ -32,6 +33,9 @@ function getProjectId():string {
 
 const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: undefined }) => {
   const [stateProject, setStateProject] = useState<IFirebaseProject | undefined>(project);
+  const [active, setActive] = useState(false);
+  let projectActiveString = 'Project Active: ' + active.toString().toUpperCase(); 
+
   if (!firebase.auth().currentUser) return <Redirect to='/'/>
   if (stateProject) {
     const isTimestampInstance = stateProject?.createdAt instanceof firebase.firestore.Timestamp;
@@ -53,6 +57,10 @@ const ProjectDetails = ({ project }: { project: IFirebaseProject } | { project: 
             <div>{stateProject.authorFirstName} {stateProject.authorLastName}</div>
             <div>{toDateString}</div>
           </div>
+        </div>
+        <div>
+          <Toggle id='active' checked={active} onChange={setActive}/>
+          <label> {projectActiveString} </label>
         </div>
       </div>
     )
