@@ -30,13 +30,13 @@ const useFirebaseProject = (id: string): IFirebaseProject | undefined => {
         const fbDoc = await db.collection("projects").doc(id);
         fbDoc.get().then(function(doc) {
           if (doc.exists) {
-              console.log("Document data:", doc.data());
-              setProject({...doc.data()} as IFirebaseProject);
+            console.log("Document data:", doc.data());
+            setProject({...doc.data()} as IFirebaseProject);
           } else {
-              console.log(`Document does not exist ${id}`);
+            console.log(`Document does not exist ${id}`);
           }
         }).catch(function(error) {
-            console.log(`Error getting document: ${id}`, error);
+          console.log(`Error getting document: ${id}`, error);
         });
       } catch (error) {
         console.log(error);

@@ -24,10 +24,7 @@ const ProjectList = () => {
         const path = '/project/' + project.id;
         return (
           <Link to={{
-            pathname:path, 
-            state: {
-              project
-            },
+            pathname:path 
           }} key={project.id}>
             <ProjectSummary project={project} deleteCallback={projectDelete}/>
           </Link>

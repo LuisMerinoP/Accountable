@@ -22,28 +22,56 @@ function fillFbDataIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
   });
 }
 
+function getFromCatched(): IFirebaseProject[] { //TODO: use service worker
+  const projectList: IFirebaseProject[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key) {
+      const item = localStorage.getItem(key);
+      if (item){
+        const project = JSON.parse(item) as IFirebaseProject;
+        project.createdAt = new firebase.firestore.Timestamp(
+          project.createdAt.seconds,
+          project.createdAt.nanoseconds
+        );
+        projectList.push(project);
+      }
+    }
+  } 
+  return projectList;
+}
+
 const useProjectList = (): IFirebaseProject[] | undefined => {
   const [projects, setProjects] = useState<IFirebaseProject[] | undefined>();
   useEffect(() => {
-    let data:IFirebaseProject[] = [];
-    const unsubscribe = firebase
-      .firestore()
-      .collection('projects')
-      //.orderBy('createdAt')
-      // .limitToLast(1)
-      .onSnapshot((snapshot) => {
-        fillFbDataIn(snapshot, data);
-        setProjects([...data]);//set projects state
-      });
-
-    return () => {
-      unsubscribe();
+    const catched = localStorage.length > 0;
+    if (catched) {
+      setProjects(getFromCatched());
+      return;
+    } else {
+      let data:IFirebaseProject[] = [];
+      const unsubscribe = firebase
+        .firestore()
+        .collection('projects')
+        //.orderBy('createdAt')
+        // .limitToLast(1)
+        .onSnapshot((snapshot) => {
+          fillFbDataIn(snapshot, data);
+          const projects = [...data]
+          setProjects(projects);//set projects state
+          localStorage.clear();
+          projects.forEach(project => {
+            localStorage.setItem(project.id, JSON.stringify(project));
+          });
+        });
+  
+      return () => {
+        unsubscribe();
+      }
     }
-
   }, []);
 
   return projects;
 }
-
 
 export default useProjectList;
