@@ -7,17 +7,34 @@ import SignIn from './components/auth/signIn';
 import SignUp from './components/auth/signUp';
 import CreateProject from './components/projects/createProject';
 import { IFirebaseProject } from './store/types/projectTypes';
-import { Location } from 'history';
+import { useState } from 'react';
+import useProjectList from './data/useProjectList';
 
 function App() {
+  const [projects, setProjects] = useState<IFirebaseProject[] | undefined>(undefined as IFirebaseProject[] | undefined);
+  useProjectList(setProjects); //handle projects fetch/catch + listener setProjects
+
   return (
     <BrowserRouter>
       <div className="App">
         <NavBar />
         <Switch>
-          <Route exact path='/' component={Dashboard}/>
-          <Route
-            path='/project/:id' component={ProjectDetails}/>
+          <Route exact path='/'
+          render={() => (
+            <Dashboard
+            projects = {projects}
+            />
+          )}/>
+          <Route 
+            path='/project/:id' 
+            render={(props) => {
+              const { id } = props.match.params
+              const foundProject = projects?.find((project) => project.id === id);
+              return (
+              <ProjectDetails
+              project = {foundProject!}
+              />
+            )}}/>
           <Route path='/signin' component={SignIn}/>
           <Route path='/signup' component={SignUp}/>
           <Route path='/create' component={CreateProject}/>

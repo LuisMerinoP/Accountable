@@ -1,17 +1,17 @@
 
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 import { useEffect, useState } from 'react'; 
 import Toggle from '../toggle/toggle';
 import { IFirebaseProject } from '../../store/types/projectTypes';
 import firebase from 'firebase/app';
-import useProject from '../../data/useProject';
 
-const ProjectDetails = () => {
-  const { id } = useParams<{ id: string }>(); 
-  const project = useProject(id ?? "");
+const ProjectDetails = ( { project }: { project:IFirebaseProject } ) => {
   const [stateProject, setStateProject] = useState<IFirebaseProject | undefined>(project);
   
+  //on url paste, undefined project is passed in, the component renders with stateProject = undefined
+  //then seems that the project is passed in from above, but undefined project is not updated. 
+  //this use effect triggers the project update, so the component load in this specific case
   useEffect(() => {
     setStateProject(project);
   }, [project]);
