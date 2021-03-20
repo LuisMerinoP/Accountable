@@ -41,30 +41,27 @@ function fillFbDataIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
 //   return projectList;
 // }
 
-const useProjectList = (setProjectsCallback:React.Dispatch<React.SetStateAction<IFirebaseProject[] | undefined>>): IFirebaseProject[] | undefined => {
+const useProjectList = (setProjectsCallback:React.Dispatch<React.SetStateAction<IFirebaseProject[] | undefined>>, isUserAuthed: boolean): IFirebaseProject[] | undefined => {
   const [projects, setProjects] = useState<IFirebaseProject[] | undefined>();
   useEffect(() => {
-    let data:IFirebaseProject[] = [];
-    const unsubscribe = firebase
-      .firestore()
-      .collection('projects')
-      //.orderBy('createdAt')
-      // .limitToLast(1)
-      .onSnapshot((snapshot) => {
-        fillFbDataIn(snapshot, data);
-        const projects = [...data]
-        setProjects(projects);//set projects state
-        setProjectsCallback(projects);
-        localStorage.clear();
-        projects.forEach(project => {
-          localStorage.setItem(project.id, JSON.stringify(project));
+    if (isUserAuthed) {
+      let data:IFirebaseProject[] = [];
+      const unsubscribe = firebase
+        .firestore()
+        .collection('projects')
+        //.orderBy('createdAt')
+        // .limitToLast(1)
+        .onSnapshot((snapshot) => {
+          fillFbDataIn(snapshot, data);
+          const projects = [...data]
+          setProjects(projects);//set projects state
+          setProjectsCallback(projects);
         });
-      });
-
-    return () => {
-      unsubscribe();
+      return () => {
+        unsubscribe();
+      }
     }
-  }, [setProjectsCallback]);
+  }, [setProjectsCallback, isUserAuthed]);
 
   return projects;
 }

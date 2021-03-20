@@ -9,10 +9,12 @@ import CreateProject from './components/projects/createProject';
 import { IFirebaseProject } from './store/types/projectTypes';
 import { useState } from 'react';
 import useProjectList from './data/useProjectList';
+import firebase from 'firebase/app';
 
 function App() {
   const [projects, setProjects] = useState<IFirebaseProject[] | undefined>(undefined as IFirebaseProject[] | undefined);
-  useProjectList(setProjects); //handle projects fetch/catch + listener setProjects
+  const isUserAuthed = firebase.auth().currentUser != null;
+  useProjectList(setProjects, isUserAuthed); //handle projects fetch/catch + listener setProjects
 
   return (
     <BrowserRouter>

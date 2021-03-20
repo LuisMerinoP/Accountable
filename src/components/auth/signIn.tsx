@@ -1,40 +1,40 @@
-import React, { BaseSyntheticEvent, Component } from 'react'
-import { connect, ConnectedProps } from 'react-redux';
-import { signIn } from '../../store/actions/authActions';
-import { ThunkDispatch  } from "redux-thunk";
-import { RootState } from './../../store/reducers/rootReducer';
+import { BaseSyntheticEvent, Component } from 'react'
 import { Redirect } from 'react-router-dom';
+import firebase from 'firebase/app';
 
-type AuthAction = {
-  type:string,
-  err?: unknown 
+interface AuthState {
+  authState: boolean,
+  authError: string | null;
 }
 
-interface LoginCredentials {
-  email: string;
-  password: string;
+async function signIn (credentials: {email:string, password:string}): Promise<AuthState> {
+  const authState = {} as AuthState ;
+  await firebase.auth().signInWithEmailAndPassword(
+    credentials.email,
+    credentials.password
+  ).then((response) => {
+    if (response.user) {
+      console.log('login succesful');
+      authState.authState = true;
+      authState.authError = null;
+    } else {
+      console.log('login error');
+    }
+  }).catch(err => {
+    console.log(err);
+    authState.authState = false;
+    authState.authError = err;
+  });
+
+  return authState;
 }
 
-const mapStateToProps = (state:RootState) => {
-  return {
-    auth: state.firebase.auth,
-    authError: state.auth.authError
-  }
-}
-
-const mapDispatchToProps = ( dispatch: ThunkDispatch<any, never, AuthAction> ) => {
-  return {
-    signIn: (credentials: LoginCredentials) => dispatch(signIn(credentials))
-  };
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps)
-type Props = ConnectedProps<typeof connector>
-
-class SignIn extends Component<Props> {
+class SignIn extends Component {
   state = {
     email:'',
-    password:''
+    password:'',
+    authState: false,
+    authError: ''
   }
 
   handleChange = (e:BaseSyntheticEvent) => {
@@ -43,14 +43,17 @@ class SignIn extends Component<Props> {
     });
   }
 
-  handleSubmit = (e:BaseSyntheticEvent) => {
+  handleSubmit = async (e:BaseSyntheticEvent) => {
     e.preventDefault();
-    this.props.signIn(this.state);
+    const authState = await signIn(this.state);
+    this.setState({
+      authState: authState.authState,
+      authError: authState.authError?.toString()
+    });
   }
 
   render() {
-    const { authError, auth } = this.props;
-    if (auth.uid) return <Redirect to='/'/>
+    if (this.state.authState) return <Redirect to='/'/>
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -66,7 +69,7 @@ class SignIn extends Component<Props> {
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Login</button>
             <div className="red-text center">
-              { authError ? <p>{authError}</p> : null }
+              { this.state.authError ? <p>{this.state.authError}</p> : null }
             </div>
           </div>
         </form> 
@@ -75,5 +78,5 @@ class SignIn extends Component<Props> {
   }
 }
 
-export default connector(SignIn);
+export default SignIn;
 

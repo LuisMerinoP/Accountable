@@ -1,6 +1,6 @@
 import { firestore } from "firebase-admin";
 import * as functions from "firebase-functions";
-import admin = require('firebase-admin');
+import * as admin from "firebase-admin";
 admin.initializeApp(functions.config().firebase);
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -10,13 +10,13 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello accountables!!");
 });
 
-interface INotifcation {
+export interface INotification {
   content:string,
   user:string,
   time:firestore.Timestamp
 };
 
-const createNotification = (notification:INotifcation) => {
+const createNotification = (notification:INotification) => {
   return admin.firestore().collection('notifications')
     .add(notification)
     .then(doc => console.log('notification added', doc));
@@ -30,7 +30,7 @@ exports.projectCreated = functions.firestore
     content: 'Added a new project',
     user: `${project.authorFirstName} ${project.authorLastName}`,
     time: admin.firestore.FieldValue.serverTimestamp()
-  } as INotifcation
+  } as INotification
 
   return createNotification(notification);
 });
@@ -45,12 +45,7 @@ exports.userJoined = functions.auth.user()
           content: 'Joined the party',
           user: `${newUser?.firstName} ${newUser?.lastName}`,
           time: admin.firestore.FieldValue.serverTimestamp()
-        } as INotifcation
+        } as INotification
         return createNotification(notification);
       })
 })
-
-
-
-
-

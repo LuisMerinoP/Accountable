@@ -9,7 +9,6 @@ import { RootState } from './../../store/reducers/rootReducer';
 import { Link } from 'react-router-dom';
 
 const mapStateToProps = (state:RootState) => {
-  console.log(state);
   return {
     auth: state.firebase.auth, 
     profile: state.firebase.profile

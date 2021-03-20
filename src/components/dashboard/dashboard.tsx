@@ -1,35 +1,53 @@
 import { Component } from 'react';
 import Notifications from './notifications';
 import ProjectList from '../projects/projectList';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '../../store/reducers/rootReducer';
+// import { connect, ConnectedProps } from 'react-redux';
+// import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
+import useNotifications from './../../data/useNotifications';
+import firebase from 'firebase/app';
+import { INotification } from './../../../functions/src/index';
 import { IFirebaseProject } from '../../store/types/projectTypes';
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    //projects: state.firestore.ordered.projects,
-    auth: state.firebase.auth
-  } 
+
+// const mapStateToProps = (state: RootState) => {
+//   return {
+//     projects: state.firestore.ordered.projects,
+//     auth: state.firebase.auth
+//   }
+// }
+
+// const connector = connect(mapStateToProps);
+// type Props = ConnectedProps<typeof connector>;
+//type ExtendedProps = Props & { projects: IFirebaseProject[] | undefined }
+
+interface DashboardProps {
+  projects: IFirebaseProject[] | undefined, //passed from above, required
+  notifications?: INotification[] | undefined, //within-managed, optional
 }
 
-const connector = connect(mapStateToProps);
-type Props = ConnectedProps<typeof connector>;
-type ExtendedProps = Props & { projects: IFirebaseProject[] | undefined }
+// dashboard wrapper to use the notifs hook in the dashboard class component
+const withUseNotifsHookHOC = (Component: typeof Dashboard) => {
+  return (props: DashboardProps) => { 
+    //const user = firebase.auth().currentUser;
+    if (!firebase.auth().currentUser) return <Redirect to='/signin' />;
+    const notifications = useNotifications();
+    return (<Component {...props} notifications={notifications} />);
+  }
+};
 
-class Dashboard extends Component<ExtendedProps> {
+class Dashboard extends Component<DashboardProps> {
   render() {
-    const { auth } = this.props;
-    if (!auth.uid) return <Redirect to='/signin'/>
+    
     if (this.props.projects) {
       return (
         <div className="dashboard container">
           <div className="row">
             <div className="col s12 m6">
-            <ProjectList projects={this.props.projects} /> 
+            <ProjectList projects={this.props.projects} />
               </div>
             <div className="col s12 m5 offset-m1">
-            <Notifications />
+            <Notifications notifications={this.props.notifications} />
             </div>
           </div>
         </div>
@@ -37,11 +55,11 @@ class Dashboard extends Component<ExtendedProps> {
     } else {
       return(
         <div>
-          <p> Loading projects... </p>
+          <p> Loading... </p>
         </div>
       )
     }
   }
 }
 
-export default connector(Dashboard);
+export default withUseNotifsHookHOC(Dashboard);
