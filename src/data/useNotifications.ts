@@ -27,8 +27,8 @@ const useNotifications = ():INotification[] | undefined => {
     const unsubscribe = firebase
       .firestore()
       .collection('notifications')
-      //.orderBy('createdAt')
-      // .limitToLast(1)
+      .orderBy('time')
+      .limitToLast(3)
       .onSnapshot((snapshot) => {
         fillNotifsIn(snapshot, data);
         const notifications = [...data]

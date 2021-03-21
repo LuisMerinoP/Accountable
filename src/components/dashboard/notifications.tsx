@@ -9,12 +9,13 @@ const Notifications = ( { notifications }:{ notifications:INotification[] | unde
           <div className="card-content">
             <span className="card-title">Notifications</span>
             <ul className="notifications">
-            { notifications && notifications.map( (notification, index) => {
-              const date = moment(notification.time.toDate()).calendar();
+            {notifications && notifications.map((notification, index) => {
               return (
-              <div key={index}>
-                {notification.content + ' ' + notification.user + ' ' + date}
-              </div>
+                <li key={index}>
+                  <span className="pink-text">{notification.user} </span>
+                  <span>{notification.content}</span>
+                  <div className="note-date grey-text">{moment(notification.time.toDate()).fromNow()}</div>
+                </li>
               )
             })}  
             </ul>
