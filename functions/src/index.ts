@@ -35,6 +35,25 @@ exports.projectCreated = functions.firestore
   return createNotification(notification);
 });
 
+const deleteNotification = (notification:INotification) => {
+  return admin.firestore().collection('notifications')
+    .add(notification)
+    .then(doc => console.log('notification added', doc));
+};
+
+exports.projectCreated = functions.firestore
+  .document('projects/{projectId}')
+  .onDelete(doc=>{
+  const project = doc.data();
+  const notification = {
+    content: 'Project deleted',
+    user: `${project.authorFirstName} ${project.authorLastName}`,
+    time: admin.firestore.FieldValue.serverTimestamp()
+  } as INotification
+
+  return deleteNotification(notification);
+});
+
 exports.userJoined = functions.auth.user()
   .onCreate(user => {
     return admin.firestore().collection('users')
