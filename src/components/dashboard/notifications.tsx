@@ -9,7 +9,7 @@ const Notifications = ( { notifications }:{ notifications:INotification[] | unde
           <div className="card-content">
             <span className="card-title">Notifications</span>
             <ul className="notifications">
-            {notifications && notifications.slice(0,3).map((notification, index) => {
+            {notifications && notifications.slice(0,6).map((notification, index) => {
               return (
                 <li key={index}>
                   <span className="pink-text">{notification.user} </span>

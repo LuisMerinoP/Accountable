@@ -41,7 +41,7 @@ const deleteNotification = (notification:INotification) => {
     .then(doc => console.log('notification added', doc));
 };
 
-exports.projectCreated = functions.firestore
+exports.projectDeleted = functions.firestore
   .document('projects/{projectId}')
   .onDelete(doc=>{
   const project = doc.data();

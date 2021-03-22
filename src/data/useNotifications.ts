@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import { INotification } from './../../functions/src/index';
+import { isConstructorDeclaration } from 'typescript';
 
 //TODO: notif autoclean in database from determined point in time on
 
@@ -20,6 +21,19 @@ function fillNotifsIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
   });
 }
 
+async function checkForNotifClean(docsToKeep:firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>) {
+  const db = firebase.firestore();
+  const notifCollection = db.collection('notifications')
+  const allData = await notifCollection.get();
+  allData.docs.forEach(doc => {
+    const filtered = docsToKeep.docs.filter(entry => entry.id === doc.id); 
+    const needsErase = filtered.length === 0;
+    if (needsErase) {
+      const id = doc.id; 
+      notifCollection.doc(id).delete();
+    }
+  })
+}
 const useNotifications = ():INotification[] | undefined => {
   const [notifications, setNotifications] = useState<INotification[] | undefined>();
   useEffect(() => {
@@ -28,11 +42,12 @@ const useNotifications = ():INotification[] | undefined => {
       .firestore()
       .collection('notifications')
       .orderBy('time')
-      .limitToLast(3)
+      .limitToLast(6)
       .onSnapshot((snapshot) => {
         fillNotifsIn(snapshot, data);
         const notifications = [...data]
         setNotifications(notifications);//set projects state
+        checkForNotifClean(snapshot);
       });
 
     return () => {
