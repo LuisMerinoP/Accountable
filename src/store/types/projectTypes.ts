@@ -40,3 +40,23 @@ export interface IFirebaseProject {
 }
 
 export type ProjectActionTypes = CreateProjectAction | DeleteProjectAction
+
+//draft types
+
+enum ProyectType {
+  time, //accumulated time
+  hits, //accumulated hits
+  value, //track of an average value, e.g weight
+  results //description + results e.g crossfit results
+}
+
+export interface AccountableProjectBase {
+  id: string,
+  authorFirstName: string,
+  authorId: string,
+  authorLastName: string,
+  content: string,
+  createdAt: firebase.firestore.Timestamp, //firebase timestamp
+  title: string,
+  projectType: ProyectType
+}

@@ -34,6 +34,7 @@ async function checkForNotifClean(docsToKeep:firebase.firestore.QuerySnapshot<fi
     }
   })
 }
+
 const useNotifications = ():INotification[] | undefined => {
   const [notifications, setNotifications] = useState<INotification[] | undefined>();
   useEffect(() => {

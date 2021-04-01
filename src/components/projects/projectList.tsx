@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 
 const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }) => {
-  //const projects = useProjectList(getProjectsCallback);
   
   const projectDelete = (project: IFirebaseProject ) => {
     const db = firebase.firestore();
@@ -18,14 +17,14 @@ const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }
   }
 
   return(
-    <div className="project-list section">
+    <div className="project-list">
       { projects && projects.map( project => {
         const path = '/project/' + project.id;
         return (
-            <Link to={{
-              pathname:path 
-              }} key={project.id}>
-              <ProjectSummary project={project} deleteCallback={projectDelete}/>
+          <Link to={{
+            pathname:path 
+            }} key={project.id}>
+            <ProjectSummary project={project} deleteCallback={projectDelete}/>
           </Link>
         )
       })}  

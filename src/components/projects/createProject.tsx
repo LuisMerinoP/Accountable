@@ -21,11 +21,12 @@ class CreateProject extends Component<Props> {
   createProject = (project:{title:string, content:string}) => {
     // make async call to database
     const db = firebase.firestore();
+    var user = firebase.auth().currentUser;
     db.collection('projects').add({
       ...project,
-      authorFirstName: 'Net',
-      authorLastName: 'Ninja',
-      authorId: 12345,
+      authorFirstName: user?.displayName,
+      // authorLastName: 'Ninja',
+      authorId: firebase.auth().currentUser?.uid,
       createdAt: firebase.firestore.Timestamp.fromDate(new Date())
       }).then(() => {
         console.log('project created')
