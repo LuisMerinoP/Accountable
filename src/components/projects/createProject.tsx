@@ -12,6 +12,18 @@ class CreateProject extends Component<Props> {
     content:''
   }
 
+  componentDidMount() {
+    const dropdown = document.querySelector('.dropdown-trigger') as Element;
+    M.Dropdown.init(dropdown, {
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: false, // Activate on hover
+      alignment: 'left', // Displays dropdown with edge aligned to the left of button 
+      coverTrigger: false
+    });
+  }
+
   handleChange = (e:BaseSyntheticEvent) => {
     this.setState({
       [e.target.id]: e.target.value
@@ -41,7 +53,8 @@ class CreateProject extends Component<Props> {
     this.props.history.push('/');
   }
 
-  userStatus = { isUserLoggedIn: false};
+  userStatus = {isUserLoggedIn: false};
+
 
   render() {
     const user = firebase.auth().currentUser;
@@ -58,6 +71,42 @@ class CreateProject extends Component<Props> {
             <label htmlFor="content">Project Content</label>
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
+
+          {/* <ul id="dropdown" className="dropdown-content">
+            <li><a href="#!">EMPOWER YOUR BUSINESS!</a></li>
+            <li className="divider"></li>
+            <li><a href="#!">Services</a></li>
+            <li className="divider"></li>
+            <li><a href="#!">About</a></li>
+            <li className="divider"></li>
+            <li><a href="#!">Blog</a></li>
+            <li className="divider"></li>
+            <li><a href="#!">Contact</a></li>
+          </ul>
+          <ul className="dds">
+            <li><a className="dropdown-trigger" data-target="dropdown" href="#!"> Dropdown <i className="material-icons">arrow_drop_down</i></a></li>
+          </ul> */}
+
+          <div style={{display:'inline'}} >
+            <div className="input-field">
+              <label htmlFor="title">Project type</label>
+              <input type="text" id="type" onChange={this.handleChange}/>                  
+            </div>
+          
+            {/* <!-- Dropdown Trigger --> */}
+            <a className='dropdown-trigger btn' href='#!' data-target='dropdown1'><i className="large material-icons">arrow_drop_down</i></a>
+          </div>
+          
+          {/* <!-- Dropdown Structure --> */}
+          <ul id='dropdown1' className='dropdown-content'>
+            <li><a href="#!">one</a></li>
+            <li><a href="#!">two</a></li>
+            <li className="divider" tabIndex={-1}></li>
+            <li><a href="#!">three</a></li>
+            <li><a href="#!"><i className="material-icons">view_module</i>four</a></li>
+            <li><a href="#!"><i className="material-icons">cloud</i>five</a></li>
+          </ul>
+
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Create</button>
           </div>
@@ -66,7 +115,5 @@ class CreateProject extends Component<Props> {
     )
   }
 }
-
-
 
 export default CreateProject;

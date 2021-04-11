@@ -17,18 +17,21 @@ const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }
   }
 
   return(
-    <div className="project-list">
-      { projects && projects.map( project => {
-        const path = '/project/' + project.id;
-        return (
-          <Link to={{
-            pathname:path 
-            }} key={project.id}>
-            <ProjectSummary project={project} deleteCallback={projectDelete}/>
-          </Link>
-        )
-      })}  
+    <div className="col s12">
+      <div className="project-list">
+        { projects && projects.map( project => {
+          const path = '/project/' + project.id;
+          return (
+            <Link to={{
+              pathname:path 
+              }} key={project.id}>
+              <ProjectSummary project={project} deleteCallback={projectDelete}/>
+            </Link>
+          )
+        })}  
+      </div>
     </div>
+    
   )
 }
 

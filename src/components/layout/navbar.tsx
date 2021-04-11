@@ -28,6 +28,7 @@ const NavBar = (props:Props) => {
         $('.sidenav').sidenav('close');
     });
   });
+  
   const { auth, profile } = props
   const links = auth.uid ? <SignedInLinks profile={profile}/> : <SignedOutLinks/>
   return (

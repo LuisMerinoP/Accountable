@@ -1,3 +1,11 @@
+Continue with: Project type dropdown. set the input field and the dropdown horizontally
+
 1.- 01.04.21. make the scrollable project list fit the list exactly (top and bottom of the scroll dont fit) + 
-make the scroll appear/dissapear according to the numbar of todos
+make the scroll appear/dissapear according to the numbar of todos + set the scroll bar as de default (grey )one instead the cool one. 
+I would live the cool one, but cannot get it to work with the default one.
+
+2.- 11.04.21. select componentPRoject dropdown from specific component to initialize instead of with
+const dropdown = document.querySelector('.dropdown-trigger') as Element;
+
+
 

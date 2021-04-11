@@ -29,7 +29,7 @@ const rrfProps = {
 firebase.auth().onAuthStateChanged((user) => {
   ReactDOM.render(
     <React.StrictMode>
-    <Provider store={store}>
+      <Provider store={store}>
         <ReactReduxFirebaseProvider {...rrfProps}>
           <App />
         </ReactReduxFirebaseProvider>
