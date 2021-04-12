@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import SelectProjectType from './selectProjectType';
 
 type Props = typeof firebase.auth & RouteComponentProps
 
@@ -13,14 +14,24 @@ class CreateProject extends Component<Props> {
   }
 
   componentDidMount() {
-    const dropdown = document.querySelector('.dropdown-trigger') as Element;
-    M.Dropdown.init(dropdown, {
-      inDuration: 300,
-      outDuration: 225,
-      constrainWidth: false, // Does not change width of dropdown to that of the activator
-      hover: false, // Activate on hover
-      alignment: 'left', // Displays dropdown with edge aligned to the left of button 
-      coverTrigger: false
+    const select = document.querySelector('select') as Element;
+    // M.Dropdown.init(dropdown, {
+    //   inDuration: 300,
+    //   outDuration: 225,
+    //   constrainWidth: false, // Does not change width of dropdown to that of the activator
+    //   hover: false, // Activate on hover
+    //   alignment: 'left', // Displays dropdown with edge aligned to the left of button 
+    //   coverTrigger: false
+    // });
+    M.FormSelect.init(select, {
+      dropdownOptions: {
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false, // Does not change width of dropdown to that of the activator
+        hover: false, // Activate on hover
+        alignment: 'left', // Displays dropdown with edge aligned to the left of button 
+        coverTrigger: false
+      }
     });
   }
 
@@ -72,33 +83,17 @@ class CreateProject extends Component<Props> {
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
 
-          {/* <ul id="dropdown" className="dropdown-content">
-            <li><a href="#!">EMPOWER YOUR BUSINESS!</a></li>
-            <li className="divider"></li>
-            <li><a href="#!">Services</a></li>
-            <li className="divider"></li>
-            <li><a href="#!">About</a></li>
-            <li className="divider"></li>
-            <li><a href="#!">Blog</a></li>
-            <li className="divider"></li>
-            <li><a href="#!">Contact</a></li>
-          </ul>
-          <ul className="dds">
-            <li><a className="dropdown-trigger" data-target="dropdown" href="#!"> Dropdown <i className="material-icons">arrow_drop_down</i></a></li>
-          </ul> */}
-
-
           <div className="input-field">
             <label htmlFor="title">Project type</label>
             <input type="text" id="type" onChange={this.handleChange}/>                  
           </div>
         
-          {/* <!-- Dropdown Trigger --> */}
-          <div>
+
+          {/* <div>
             <a className='dropdown-trigger btn' href='#!' data-target='dropdown1'>Project type<i className="large material-icons" style={{lineHeight: 'initial'}}>arrow_drop_down</i></a>
           </div>
           
-          {/* <!-- Dropdown Structure --> */}
+
           <ul id='dropdown1' className='dropdown-content'>
             <li><a href="#!">one</a></li>
             <li><a href="#!">two</a></li>
@@ -110,7 +105,9 @@ class CreateProject extends Component<Props> {
                 <i className="material-icons">cloud</i>five
               </a>
             </li>
-          </ul>
+          </ul> */}
+
+          <SelectProjectType/>
 
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Create</button>
