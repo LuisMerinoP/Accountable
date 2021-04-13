@@ -43,7 +43,7 @@ export type ProjectActionTypes = CreateProjectAction | DeleteProjectAction
 
 //draft types
 
-enum ProyectType {
+export enum ProyectType {
   time, //accumulated time
   hits, //accumulated hits
   value, //track of an average value, e.g weight

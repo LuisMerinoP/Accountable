@@ -15,14 +15,6 @@ class CreateProject extends Component<Props> {
 
   componentDidMount() {
     const select = document.querySelector('select') as Element;
-    // M.Dropdown.init(dropdown, {
-    //   inDuration: 300,
-    //   outDuration: 225,
-    //   constrainWidth: false, // Does not change width of dropdown to that of the activator
-    //   hover: false, // Activate on hover
-    //   alignment: 'left', // Displays dropdown with edge aligned to the left of button 
-    //   coverTrigger: false
-    // });
     M.FormSelect.init(select, {
       dropdownOptions: {
         inDuration: 300,
@@ -30,7 +22,7 @@ class CreateProject extends Component<Props> {
         constrainWidth: false, // Does not change width of dropdown to that of the activator
         hover: false, // Activate on hover
         alignment: 'left', // Displays dropdown with edge aligned to the left of button 
-        coverTrigger: false
+        coverTrigger: true
       }
     });
   }
