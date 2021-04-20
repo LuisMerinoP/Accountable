@@ -8,8 +8,12 @@ const values = (Object.keys(ProyectType) as ProyectTypeKeys)
   .filter((k): k is keyof typeof ProyectType => typeof ProyectType[k] === "number");
 // const values: ("time" | "hits" | "value" | "results")[]
 
-const keys = values.map(k => ProyectType[k]);
+//const keys = values.map(k => ProyectType[k]);
 // const keys: ProyectType[]
+
+const makeOptionItem = function(value: ("time" | "hits" | "value" | "results"), key: ProyectType) {
+  return <option value={key}>{value}</option>;
+};
 
 const SelectProjectType = () => {
   const [defaultPlaceholderText, setPlaceHolderText] = useState('Choose project type')
@@ -33,10 +37,7 @@ const SelectProjectType = () => {
     <div className="input-field">
       <select id="defaultOption" defaultValue='' onChange={handleOnChange} >
         <option value='' disabled>{defaultPlaceholderText}</option>
-        <option value={keys[0]}>{values[0]}</option>
-        <option value={keys[1]}>{values[1]}</option>
-        <option value={keys[2]}>{values[2]}</option>
-        <option value={keys[3]}>{values[3]}</option>
+        {values.map(makeOptionItem)}
       </select>
     </div>
   );
