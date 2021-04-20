@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { ProyectType } from './../../store/types/projectTypes';
 
-function projectTypeValues() {
-  const values = Object.keys(ProyectType).filter(k => typeof ProyectType[k as any] === "number"); // ["time", "hits", "value", "results"]
-  const keys = values.map(k => ProyectType[k as any]); // [0, 1, 2, 3]
+type ProyectTypeKeys = Array<keyof typeof ProyectType | number>;
+// type ProyectTypeKeys = (number | "time" | "hits" | "value" | "results")[]
 
-  return values;
-}
+const values = (Object.keys(ProyectType) as ProyectTypeKeys)
+  .filter((k): k is keyof typeof ProyectType => typeof ProyectType[k] === "number");
+// const values: ("time" | "hits" | "value" | "results")[]
+
+const keys = values.map(k => ProyectType[k]);
+// const keys: ProyectType[]
 
 const SelectProjectType = () => {
   const [defaultPlaceholderText, setPlaceHolderText] = useState('Choose project type')
@@ -23,7 +26,6 @@ const SelectProjectType = () => {
       dropdownWrapper.setAttribute("style", "color:black;");
       setPlaceHolderText('');
       setIsDropdownSet(true);
-      projectTypeValues();
     }
   }
 
@@ -31,9 +33,10 @@ const SelectProjectType = () => {
     <div className="input-field">
       <select id="defaultOption" defaultValue='' onChange={handleOnChange} >
         <option value='' disabled>{defaultPlaceholderText}</option>
-        <option value="1">Option 1</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
+        <option value={keys[0]}>{values[0]}</option>
+        <option value={keys[1]}>{values[1]}</option>
+        <option value={keys[2]}>{values[2]}</option>
+        <option value={keys[3]}>{values[3]}</option>
       </select>
     </div>
   );

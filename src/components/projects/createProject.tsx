@@ -74,31 +74,7 @@ class CreateProject extends Component<Props> {
             <label htmlFor="content">Project Content</label>
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
-
-          <div className="input-field">
-            <label htmlFor="title">Project type</label>
-            <input type="text" id="type" onChange={this.handleChange}/>                  
-          </div>
-        
-
-          {/* <div>
-            <a className='dropdown-trigger btn' href='#!' data-target='dropdown1'>Project type<i className="large material-icons" style={{lineHeight: 'initial'}}>arrow_drop_down</i></a>
-          </div>
           
-
-          <ul id='dropdown1' className='dropdown-content'>
-            <li><a href="#!">one</a></li>
-            <li><a href="#!">two</a></li>
-            <li className="divider" tabIndex={-1}></li>
-            <li><a href="#!">three</a></li>
-            <li><a href="#!"><i className="material-icons">view_module</i>four</a></li>
-            <li onClick={() => console.log('item selected!')}>
-              <a href="#!">
-                <i className="material-icons">cloud</i>five
-              </a>
-            </li>
-          </ul> */}
-
           <SelectProjectType/>
 
           <div className="input-field">
