@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+function addClass(selector:string, className:string) {
+  const element = document.querySelector(selector);
+  element?.classList.add(className);
+}
+
 const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
   const myInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => { // timepickers init
@@ -13,8 +18,8 @@ const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
         let twelveDiv = Array.from(timePickerDivs).find(element => element.innerHTML === '12')
         if (twelveDiv) twelveDiv.innerHTML = '00';
         // remove AM PM labels from display
-        let ampmLabels = document.getElementsByClassName('timepicker-span-am-pm')[0];
-        ampmLabels.setAttribute("style", "display:none;");
+        const ampmLabels = document.querySelector('.timepicker-span-am-pm');
+        ampmLabels?.classList.add('hidden');
       },
       onCloseStart:() => {
         let value = myInputRef.current?.value.replace('AM','').replace('PM','');
@@ -27,7 +32,6 @@ const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
 
   return (
     <div>
-        {/* <label htmlFor="lunchtime">Lunchtime</label> */}
         <input id="timeObjective" type="text" className="timepicker" ref={myInputRef}/>
     </div>
   );

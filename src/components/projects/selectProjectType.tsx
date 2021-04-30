@@ -26,8 +26,8 @@ const SelectProjectType = () => {
   //set style from grey (placeholder text) to black(input text) and erase placeholder only on 1rst  option select
   const handleOnChange = () => {
     if (!isDropdownSet) {
-      const dropdownWrapper = document.getElementsByClassName('select-dropdown dropdown-trigger')[0];
-      dropdownWrapper.setAttribute("style", "color:black;");
+      const dropdownWrapper = document.querySelector('.select-dropdown.dropdown-trigger');
+      dropdownWrapper?.classList.add('text-black');
       setPlaceHolderText('');
       setIsDropdownSet(true);
     }
