@@ -31,7 +31,6 @@ const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }
         })}  
       </div>
     </div>
-    
   )
 }
 

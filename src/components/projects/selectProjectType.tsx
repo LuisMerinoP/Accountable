@@ -12,7 +12,7 @@ const values = (Object.keys(ProyectType) as ProyectTypeKeys)
 // const keys: ProyectType[]
 
 const makeOptionItem = function(value: ("time" | "hits" | "value" | "results"), key: ProyectType) {
-  return <option value={key}>{value}</option>;
+  return <option key={key} value={key}>{value}</option>;
 };
 
 const SelectProjectType = () => {

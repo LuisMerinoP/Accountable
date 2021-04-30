@@ -4,13 +4,15 @@ import { RouteComponentProps } from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import SelectProjectType from './selectProjectType';
+import FrequencySet from './frequencySet';
 
 type Props = typeof firebase.auth & RouteComponentProps
 
 class CreateProject extends Component<Props> {
   state = {
     title:'',
-    content:''
+    content:'',
+    timeObjectiveLabelText:'Time Objective'
   }
 
   componentDidMount() {
@@ -56,8 +58,7 @@ class CreateProject extends Component<Props> {
     this.props.history.push('/');
   }
 
-  userStatus = {isUserLoggedIn: false};
-
+  clearLabel = () => {this.setState({ timeObjectiveLabelText: ''})};
 
   render() {
     const user = firebase.auth().currentUser;
@@ -74,9 +75,11 @@ class CreateProject extends Component<Props> {
             <label htmlFor="content">Project Content</label>
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
-          
           <SelectProjectType/>
-
+          <div className="input-field">
+            <label htmlFor="timeObjective">{this.state.timeObjectiveLabelText}</label>
+            <FrequencySet clearLableCallback={this.clearLabel} />
+          </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Create</button>
           </div>
