@@ -69,7 +69,7 @@ class CreateProject extends Component<Props> {
           <h5 className="grey-text text-darken-3">Create new project</h5>
           <div className="input-field">
             <label htmlFor="title">Title</label>
-            <input type="text" id="title" onChange={this.handleChange}/>
+            <input type="text" id="title" onChange={this.handleChange} autoComplete="off"/>
           </div>
           <div className="input-field">
             <label htmlFor="content">Project Content</label>
