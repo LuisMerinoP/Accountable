@@ -1,12 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 function addClass(selector:string, className:string) {
   const element = document.querySelector(selector);
   element?.classList.add(className);
-}
-
-interface ExtendedTimePicker extends M.Timepicker {
-  hours: number
 }
 
 const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
@@ -17,8 +13,7 @@ const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
       defaultTime: "00:00",
       showClearBtn: true,
       onOpenStart: () => { 
-        const ampmLabels = document.querySelector('.timepicker-span-am-pm');
-        ampmLabels?.classList.add('hidden');
+        addClass('.timepicker-span-am-pm', 'hidden');
       },
       onCloseStart:() => {
         let value = myInputRef.current?.value.replace('AM','').replace('PM','').replace(/\s/g, "");

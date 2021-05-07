@@ -3,8 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import SelectProjectType from './selectProjectType';
+import MaterializeDropdown from './MaterializeDropdown';
 import FrequencySet from './frequencySet';
+import { getProjectTypes } from './../../data/useProjectType'
 
 type Props = typeof firebase.auth & RouteComponentProps
 
@@ -16,16 +17,19 @@ class CreateProject extends Component<Props> {
   }
 
   componentDidMount() {
-    const select = document.querySelector('select') as Element;
-    M.FormSelect.init(select, {
-      dropdownOptions: {
-        inDuration: 300,
-        outDuration: 225,
-        constrainWidth: false, // Does not change width of dropdown to that of the activator
-        hover: false, // Activate on hover
-        alignment: 'left', // Displays dropdown with edge aligned to the left of button 
-        coverTrigger: true
-      }
+    // const select = document.querySelector('select') as Element;
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+      M.FormSelect.init(select, {
+        dropdownOptions: {
+          inDuration: 300,
+          outDuration: 225,
+          constrainWidth: false, // Does not change width of dropdown to that of the activator
+          hover: false, // Activate on hover
+          alignment: 'left', // Displays dropdown with edge aligned to the left of button 
+          coverTrigger: true
+        }
+      });
     });
   }
 
@@ -75,10 +79,15 @@ class CreateProject extends Component<Props> {
             <label htmlFor="content">Project Content</label>
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
-          <SelectProjectType/>
-          <div className="input-field">
-            <label htmlFor="timeObjective">{this.state.timeObjectiveLabelText}</label>
-            <FrequencySet clearLableCallback={this.clearLabel} />
+          <div className="row">
+            <MaterializeDropdown options={getProjectTypes}/>
+          </div>
+          <div className="row">
+            <div className="input-field col s6">
+              <label htmlFor="timeObjective">{this.state.timeObjectiveLabelText}</label>
+              <FrequencySet clearLableCallback={this.clearLabel} />
+            </div>
+            <MaterializeDropdown options={['our', 'day', 'week', 'month']}/>
           </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Create</button>

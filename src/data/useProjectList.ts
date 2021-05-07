@@ -63,7 +63,7 @@ const useProjectList = (setProjectsCallback:React.Dispatch<React.SetStateAction<
         unsubscribe();
       }
     }
-  }, [setProjectsCallback, isUserAuthed]);
+  }, [setProjectsCallback, isUserAuthed, userId]);
 
   return projects;
 }

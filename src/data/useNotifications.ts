@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import { INotification } from './../../functions/src/index';
-import { isConstructorDeclaration } from 'typescript';
 
 //TODO: notif autoclean in database from determined point in time on
 
