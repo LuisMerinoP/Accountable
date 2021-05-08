@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-type OptionUnionType = string[][number] 
-type OptionUnionTypeArray = OptionUnionType[]
-
-const makeOptionItem = function(value: OptionUnionType, key: number) {
+const makeOptionItem = function(value: string, key: number) {
   return <option key={key} value={key}>{value}</option>;
 };
 
-const MaterializeDropdown = (props: { options: OptionUnionTypeArray } ) => {
-  const [defaultPlaceholderText, setPlaceHolderText] = useState('Choose project type')
+const MaterializeDropdown = (props: { options: string[], placeholderText:string, onOptionSelect?: (selectedOption:string) => void } ) => {
+  const [placeholderText, setPlaceHolderText] = useState(props.placeholderText)
   const [isDropdownSet, setIsDropdownSet] = useState(false);
-  //const values = useProjectTypes();
+  let selectRef = useRef(null);
 
   useEffect(() => {
-    setIsDropdownSet(false);
-  }, []);
-  
+    const select = selectRef.current;      
+    if (select) M.FormSelect.init(select, {
+      dropdownOptions: {
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false, // Does not change width of dropdown to that of the activator
+        hover: false, // Activate on hover
+        alignment: 'left', // Displays dropdown with edge aligned to the left of button 
+        coverTrigger: true
+      }
+    });
+  });
   //set style from grey (placeholder text) to black(input text) and erase placeholder only on 1rst  option select
   const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (!isDropdownSet) {
@@ -24,15 +30,14 @@ const MaterializeDropdown = (props: { options: OptionUnionTypeArray } ) => {
       setPlaceHolderText('');
       setIsDropdownSet(true);
     }
+    if (props.onOptionSelect) props.onOptionSelect(event.target.value);
   }
 
   return(
-    <div className="input-field col s6">
-      <select id="defaultOption" defaultValue='' onChange={(event) => handleOnChange(event)} >
-        <option value='' disabled>{defaultPlaceholderText}</option>
-        {props.options.map(makeOptionItem)}
-      </select>
-    </div>
+    <select id="defaultOption" defaultValue='' onChange={(event) => handleOnChange(event)} ref={selectRef}>
+      <option value='' disabled>{placeholderText}</option>
+      {props.options.map(makeOptionItem)}
+    </select>
   );
 }
 

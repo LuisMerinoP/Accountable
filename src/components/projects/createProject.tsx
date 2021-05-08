@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, Component } from 'react'
+import { BaseSyntheticEvent, Component} from 'react'
 import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router-dom";
 import firebase from 'firebase/app';
@@ -13,24 +13,8 @@ class CreateProject extends Component<Props> {
   state = {
     title:'',
     content:'',
-    timeObjectiveLabelText:'Time Objective'
-  }
-
-  componentDidMount() {
-    // const select = document.querySelector('select') as Element;
-    const selects = document.querySelectorAll('select');
-    selects.forEach(select => {
-      M.FormSelect.init(select, {
-        dropdownOptions: {
-          inDuration: 300,
-          outDuration: 225,
-          constrainWidth: false, // Does not change width of dropdown to that of the activator
-          hover: false, // Activate on hover
-          alignment: 'left', // Displays dropdown with edge aligned to the left of button 
-          coverTrigger: true
-        }
-      });
-    });
+    timeObjectiveLabelText:'Time Objective',
+    projectTypeSelected: ''
   }
 
   handleChange = (e:BaseSyntheticEvent) => {
@@ -64,9 +48,28 @@ class CreateProject extends Component<Props> {
 
   clearLabel = () => {this.setState({ timeObjectiveLabelText: ''})};
 
+  onProjectTypeSelected = (selectedOPtion: string) => {
+    this.setState({ projectTypeSelected: selectedOPtion});
+    console.log(selectedOPtion, 'was selected!');
+  }
+
   render() {
     const user = firebase.auth().currentUser;
     if (!user) return <Redirect to='/'/>
+    let conditionalComponent:JSX.Element = <></>;
+    if (this.state.projectTypeSelected === '0') {
+      conditionalComponent = 
+      <div className="input-field col s3">
+        <label htmlFor="timeObjective">{this.state.timeObjectiveLabelText}</label>
+        <FrequencySet clearLableCallback={this.clearLabel} />
+      </div>;
+    } else if (this.state.projectTypeSelected === '1') {
+      conditionalComponent = 
+      <div className="input-field col s3">
+        <MaterializeDropdown options={['1', '2', '3', '4', '5']} placeholderText='number of hits'/>
+      </div>;
+    }
+    
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -80,14 +83,19 @@ class CreateProject extends Component<Props> {
             <textarea id="content" className="materialize-textarea" onChange={this.handleChange}></textarea>
           </div>
           <div className="row">
-            <MaterializeDropdown options={getProjectTypes}/>
+            <MaterializeDropdown options={getProjectTypes} placeholderText='Choose project type' onOptionSelect={this.onProjectTypeSelected}/>
           </div>
           <div className="row">
-            <div className="input-field col s6">
-              <label htmlFor="timeObjective">{this.state.timeObjectiveLabelText}</label>
-              <FrequencySet clearLableCallback={this.clearLabel} />
+            {conditionalComponent}
+            <div className="input-field col s1">
+              <input type="text" id='labelInput' value='per' disabled/>
             </div>
-            <MaterializeDropdown options={['our', 'day', 'week', 'month']}/>
+            <div className="input-field col s2">
+              <MaterializeDropdown options={['1', '2', '3', '4']} placeholderText=''/>
+            </div>
+            <div className="input-field col s6">
+              <MaterializeDropdown options={['our', 'day', 'week', 'month']} placeholderText='Choose period'/>
+            </div>
           </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Create</button>
