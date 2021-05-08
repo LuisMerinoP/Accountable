@@ -1,5 +1,6 @@
 import { IFirebaseProject } from "../../store/types/projectTypes";
 import moment from 'moment';
+import DeleteConfirm from './deleteProjectConfirmModal';
 
 const ProjectSummary = ( props : { project: IFirebaseProject, deleteCallback: (project: IFirebaseProject) => void }) => {
   return (
@@ -8,10 +9,13 @@ const ProjectSummary = ( props : { project: IFirebaseProject, deleteCallback: (p
         <span className="card-title ">{props.project.title}</span>
         <p>Posted by The Net Ninja</p>
         <p className="grey-text">{moment(props.project.createdAt.toDate()).calendar()}</p>
-        <button className="material-icons right" onClick={(e) => {
-          e.preventDefault();
-          props.deleteCallback(props.project);
-        }}>delete</button>
+        <div className="row">
+          <button className="material-icons right" onClick={(e) => {
+            e.preventDefault();
+            //route to the project config form
+          }}>settings</button>
+          <DeleteConfirm project={props.project} deleteCallback={props.deleteCallback}/>
+        </div>
         <br></br>
       </div>
     </div>
