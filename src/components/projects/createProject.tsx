@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, Component} from 'react'
+import React, { BaseSyntheticEvent, Component } from 'react'
 import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from "react-router-dom";
 import firebase from 'firebase/app';
@@ -14,7 +14,7 @@ class CreateProject extends Component<Props> {
     title:'',
     content:'',
     timeObjectiveLabelText:'Time Objective',
-    projectTypeSelected: ''
+    projectTypeSelected: '0',
   }
 
   handleChange = (e:BaseSyntheticEvent) => {
@@ -91,7 +91,7 @@ class CreateProject extends Component<Props> {
               <input type="text" id='labelInput' value='per' disabled/>
             </div>
             <div className="input-field col s2">
-              <MaterializeDropdown options={['1', '2', '3', '4']} placeholderText=''/>
+              <MaterializeDropdown options={['1', '2', '3', '4']} placeholderText='nº'/>
             </div>
             <div className="input-field col s6">
               <MaterializeDropdown options={['our', 'day', 'week', 'month']} placeholderText='Choose period'/>
