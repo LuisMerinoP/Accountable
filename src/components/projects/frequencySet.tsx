@@ -5,7 +5,7 @@ function addClass(selector:string, className:string) {
   element?.classList.add(className);
 }
 
-const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
+const FrequencySet =  ( props : { clearLabelCallback:() => void }) => {
   const myInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => { // timepickers init
     const elem = document.querySelector('.timepicker');
@@ -18,10 +18,12 @@ const FrequencySet =  ( props : { clearLableCallback:() => void }) => {
       onCloseStart:() => {
         let value = myInputRef.current?.value.replace('AM','').replace('PM','').replace(/\s/g, "");
         if (value && myInputRef.current) myInputRef.current.value = value;
-        props.clearLableCallback();
+        props.clearLabelCallback();
       }
     }
-    if (elem) M.Timepicker.init(elem, options);
+    if (elem) {
+      M.Timepicker.init(elem, options);
+    } 
   },[props]);
 
   return (

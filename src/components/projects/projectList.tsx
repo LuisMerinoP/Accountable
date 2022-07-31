@@ -26,7 +26,7 @@ const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }
               <Link to={{
                 pathname:path 
                 }} key={project.id}>
-                <ProjectSummary project={project} deleteCallback={projectDelete}/>
+                <ProjectSummary key={project.id} project={project} deleteCallback={projectDelete}/>
               </Link>
             </div>
           )

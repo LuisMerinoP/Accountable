@@ -32,10 +32,8 @@ function App() {
             render={(props) => {
               const { id } = props.match.params
               const foundProject = projects?.find((project) => project.id === id);
-              return (
-              <ProjectDetails
-              project = {foundProject!}
-              />
+              
+              return (<ProjectDetails project = {foundProject!}/>
             )}}/>
           <Route path='/signin' component={SignIn}/>
           <Route path='/signup' component={SignUp}/>

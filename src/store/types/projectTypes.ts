@@ -45,9 +45,10 @@ export type ProjectActionTypes = CreateProjectAction | DeleteProjectAction
 
 export enum ProyectType {
   time, //accumulated time
-  hits, //accumulated hits
-  value, //track of an average value, e.g weight
-  results //description + results e.g crossfit results
+  // TODO: functionality for the rest of the project types
+  // hits, //accumulated hits
+  // value, //track of an average value, e.g weight
+  // results //description + results e.g crossfit results
 }
 
 export interface AccountableProjectBase {
