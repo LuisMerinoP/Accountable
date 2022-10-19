@@ -8,9 +8,16 @@ import FrequencySet from './frequencySet';
 import { getProjectTypes } from './../../data/useProjectType'
 import { IProject } from '../../store/types/projectTypes';
 
-type Props = typeof firebase.auth & RouteComponentProps
+type Props = typeof firebase.auth & RouteComponentProps 
+enum Modes { 
+  EDIT_MODE = 'edit', 
+  CREATE_MODE = 'create'
+}
 class CreateProject extends Component<Props> {
   state: { title: string; content: string; timeObjectiveLabelText: string; projectTypeSelected: string; };
+  mode: Modes | null
+  titleInputBoxRef: React.RefObject<HTMLInputElement>
+  constentInputBoxRef: React.RefObject<HTMLInputElement>
   constructor(props:Props) {
     super(props);
     this.state = {
@@ -19,14 +26,29 @@ class CreateProject extends Component<Props> {
       timeObjectiveLabelText:'Time Objective',
       projectTypeSelected: '0',
     }
+
+    this.mode = null
+
+    this.titleInputBoxRef = React.createRef();
+    this.constentInputBoxRef = React.createRef()
+  }
+
+  isEdit() {
+    return this.mode === Modes.EDIT_MODE
+  }
+
+  isCreate() {
+    return this.mode === Modes.CREATE_MODE
   }
 
   componentDidMount() {
     const project:IProject = this.props.location.state as IProject;
-    const isEditOrCreate = project ? 'edit' : 'create';
+    this.mode = project ? Modes.EDIT_MODE : Modes.CREATE_MODE;
     this.setState({ 
-      timeObjectiveLabelText: isEditOrCreate === 'edit' ? '00:00' : 'Time Objective'
+      timeObjectiveLabelText: this.isEdit() ? '00:00' : 'Time Objective'
     })
+    this.titleInputBoxRef.current!.value! = this.isCreate() ? '' : project.title
+    this.constentInputBoxRef.current!.value! = this.isCreate() ? '' : project.content
   }
  
   handleChange = (e:BaseSyntheticEvent) => {
@@ -54,9 +76,15 @@ class CreateProject extends Component<Props> {
 
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
-    const project = { title: this.state.title, content: this.state.content} 
-    this.createProject(project);
-    this.props.history.push('/');
+    if (this.isCreate()) {
+      const project = { title: this.state.title, content: this.state.content} 
+      this.createProject(project);
+      this.props.history.push('/');
+    } else if (this.isEdit()) {
+      alert('find project and save changes to database implement!!')
+    } else {
+      throw new Error('shoul be edit or create mode')
+    }
   }
 
   clearLabel = () => {this.setState({ timeObjectiveLabelText: ''})};
@@ -76,7 +104,7 @@ class CreateProject extends Component<Props> {
       conditionalComponent = 
       <div className="input-field col s3">
         {/* FIXME: pass time prop if edit */}
-        <label htmlFor="timeObjective" style={{ color: isEditOrCreate === 'edit'? 'black': ''}}>{isEditOrCreate === 'edit' ? '00:00' : 'Time Objective'}</label>
+        <label htmlFor="timeObjective" style={{ color: this.isEdit() ? 'black': ''}}>{isEditOrCreate === 'edit' ? '00:00' : 'Time Objective'}</label>
         <FrequencySet clearLabelCallback={this.clearLabel}/>
       </div>;
     } else if (this.state.projectTypeSelected === '1') {
@@ -89,14 +117,14 @@ class CreateProject extends Component<Props> {
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
-          <h5 className="grey-text text-darken-3">{isEditOrCreate === 'create' ? 'Create new project' : 'Edit project'}</h5>
+          <h5 className="grey-text text-darken-3">{this.isCreate() ? 'Create new project' : 'Edit project'}</h5>
           <div className="input-field">
-            <label htmlFor="title" className={isEditOrCreate === 'create' ? '' : 'active'}>Title</label>
-            <input type="text" id="title" onChange={this.handleChange} autoComplete="off" value={isEditOrCreate === 'create' ? '' : project.title}/>
+            <label htmlFor="title" className={this.isCreate() ? '' : 'active'}>Title</label>
+            <input type="text" id="title" onChange={this.handleChange} autoComplete="off" ref={this.titleInputBoxRef}/>
           </div>
           <div className="input-field">
-            <label htmlFor="content" className={isEditOrCreate === 'create' ? '' : 'active'}>Project Content</label>
-            <textarea id="content" className="materialize-textarea" onChange={this.handleChange} value={isEditOrCreate === 'create' ? '' : project.title}></textarea>
+            <label htmlFor="content" className={this.isCreate() ? '' : 'active'}>Project Content</label>
+            <input type="text" id="content" onChange={this.handleChange} autoComplete="off" ref={this.constentInputBoxRef}/>
           </div>
           <div className="row">
             <MaterializeDropdown options={getProjectTypes} placeholderText='Choose project type' onOptionSelect={this.onProjectTypeSelected} isEditOrCreate={isEditOrCreate} />
@@ -114,7 +142,7 @@ class CreateProject extends Component<Props> {
             </div>
           </div>
           <div className="input-field">
-            <button className="btn pink lighten-1 z-depth-0">Create</button>
+            <button className="btn pink lighten-1 z-depth-0">{this.isCreate() ? 'CREATE' : 'SAVE'}</button>
           </div>
         </form> 
       </div>
