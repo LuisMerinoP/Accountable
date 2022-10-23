@@ -137,7 +137,7 @@ class CreateProject extends Component<Props> {
       conditionalComponent = 
       <div className="input-field col s3">
         {/* FIXME: pass time prop if edit */}
-        <label htmlFor="timeObjective" style={{ color: this.isEdit() ? 'black': ''}}>{isEditOrCreate === 'edit' ? '00:00' : 'Time Objective'}</label>
+        <label htmlFor="timeObjective" style={{ color: this.isEdit() ? 'black': ''}}>{this.state.timeObjectiveLabelText}</label>
         <FrequencySet clearLabelCallback={this.clearLabel}/>
       </div>;
     } else if (this.state.projectTypeSelected === '1') {
