@@ -13,6 +13,10 @@ function fillFbDataIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
     } else if (change.type === "removed") {
       const removeIndex = data.map(function(project) { return project.id; }).indexOf(change.doc.id);
       data.splice(removeIndex,1);
+    } else if (change.type === "modified") {
+      const updatedProjId = change.doc.id
+      const index: number = data.findIndex(proj => proj.id === updatedProjId)
+      data[index] = {...change.doc.data(), id: updatedProjId } as IFirebaseProject
     }
   });
 
@@ -21,25 +25,6 @@ function fillFbDataIn(snapshot: firebase.firestore.QuerySnapshot<firebase.firest
     return elemb.createdAt.toDate().getTime() - elema.createdAt.toDate().getTime()
   });
 }
-
-// function getFromCatched(): IFirebaseProject[] { //TODO: use service worker
-//   const projectList: IFirebaseProject[] = [];
-//   for (let i = 0; i < localStorage.length; i++) {
-//     const key = localStorage.key(i);
-//     if (key) {
-//       const item = localStorage.getItem(key);
-//       if (item){
-//         const project = JSON.parse(item) as IFirebaseProject;
-//         project.createdAt = new firebase.firestore.Timestamp(
-//           project.createdAt.seconds,
-//           project.createdAt.nanoseconds
-//         );
-//         projectList.push(project);
-//       }
-//     }
-//   } 
-//   return projectList;
-// }
 
 const useProjectList = (setProjectsCallback:React.Dispatch<React.SetStateAction<IFirebaseProject[] | undefined>>, isUserAuthed: boolean): IFirebaseProject[] | undefined => {
   const [projects, setProjects] = useState<IFirebaseProject[] | undefined>();
@@ -51,8 +36,6 @@ const useProjectList = (setProjectsCallback:React.Dispatch<React.SetStateAction<
         .firestore()
         .collection('projects')
         .where("authorId", "==", userId)
-        //.orderBy('createdAt')
-        // .limitToLast(1)
         .onSnapshot((snapshot) => {
           fillFbDataIn(snapshot, data);
           const projects = [...data]

@@ -1,25 +1,11 @@
 import { Component } from 'react';
 import Notifications from './notifications';
 import ProjectList from '../projects/projectList';
-// import { connect, ConnectedProps } from 'react-redux';
-// import { RootState } from '../../store/reducers/rootReducer';
 import { Redirect } from 'react-router-dom';
 import useNotifications from './../../data/useNotifications';
 import firebase from 'firebase/app';
 import { INotification } from './../../../functions/src/index';
 import { IFirebaseProject } from '../../store/types/projectTypes';
-
-
-// const mapStateToProps = (state: RootState) => {
-//   return {
-//     projects: state.firestore.ordered.projects,
-//     auth: state.firebase.auth
-//   }
-// }
-
-// const connector = connect(mapStateToProps);
-// type Props = ConnectedProps<typeof connector>;
-//type ExtendedProps = Props & { projects: IFirebaseProject[] | undefined }
 
 interface DashboardProps {
   projects: IFirebaseProject[] | undefined, //passed from above, required

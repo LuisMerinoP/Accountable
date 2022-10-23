@@ -18,19 +18,22 @@ class CreateProject extends Component<Props> {
   mode: Modes | null
   titleInputBoxRef: React.RefObject<HTMLInputElement>
   constentInputBoxRef: React.RefObject<HTMLInputElement>
+  stateRef: { title: string; content: string; timeObjectiveLabelText: string; projectTypeSelected: string; } | null
+  isInitStateSet: boolean
   constructor(props:Props) {
     super(props);
     this.state = {
-      title:'',
+      title: '',
       content:'',
       timeObjectiveLabelText:'Time Objective',
       projectTypeSelected: '0',
     }
-
     this.mode = null
 
     this.titleInputBoxRef = React.createRef();
     this.constentInputBoxRef = React.createRef()
+    this.isInitStateSet = true
+    this.stateRef = null // to check if state has changed before safe
   }
 
   isEdit() {
@@ -44,11 +47,22 @@ class CreateProject extends Component<Props> {
   componentDidMount() {
     const project:IProject = this.props.location.state as IProject;
     this.mode = project ? Modes.EDIT_MODE : Modes.CREATE_MODE;
+    const title = this.isCreate() ? '' : project.title
+    const content = this.isCreate() ? '' : project.content
     this.setState({ 
-      timeObjectiveLabelText: this.isEdit() ? '00:00' : 'Time Objective'
+      timeObjectiveLabelText: this.isEdit() ? '00:00' : 'Time Objective',
+      title,
+      content
     })
-    this.titleInputBoxRef.current!.value! = this.isCreate() ? '' : project.title
-    this.constentInputBoxRef.current!.value! = this.isCreate() ? '' : project.content
+    this.titleInputBoxRef.current!.value! = title
+    this.constentInputBoxRef.current!.value! = content
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: { title: string; content: string; timeObjectiveLabelText: string; projectTypeSelected: string; }) {
+    if (this.isInitStateSet) { // shitty hack to track this.state ref change after its set in componentDidUpdate
+      this.stateRef = this.state
+      this.isInitStateSet = false
+    }
   }
  
   handleChange = (e:BaseSyntheticEvent) => {
@@ -74,6 +88,24 @@ class CreateProject extends Component<Props> {
     })
   }
 
+  updateProject = (id: string) => {
+    try {
+      const hasStateRefChanged = this.stateRef !== this.state
+      if (hasStateRefChanged) {
+        const db = firebase.firestore();  
+        db.collection("projects").doc(id).update({
+          content: this.state.content,
+          title: this.state.title
+        });
+        this.props.history.push('/')
+      } else { // nothing to update
+        this.props.history.push('/')
+      }
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
   handleSubmit = (e:BaseSyntheticEvent) => {
     e.preventDefault();//prevents the page from reloading
     if (this.isCreate()) {
@@ -81,9 +113,10 @@ class CreateProject extends Component<Props> {
       this.createProject(project);
       this.props.history.push('/');
     } else if (this.isEdit()) {
-      alert('find project and save changes to database implement!!')
+      const projectId = (this.props.location.state as IProject).id
+      this.updateProject(projectId)
     } else {
-      throw new Error('shoul be edit or create mode')
+      console.error('should be edit or create mode')
     }
   }
 
