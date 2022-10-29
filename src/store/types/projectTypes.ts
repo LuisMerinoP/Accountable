@@ -106,7 +106,7 @@ type StrRange<T extends number> = T extends NumberRange<0, 10>
   ? `${0}${T}`
   : `${T}`
 
-type HH = StrRange<NumberRange<0, 25>>
+type HH = StrRange<NumberRange<0, 24>>
 type MM = StrRange<NumberRange<0, 60>> // 0...59
  
 type Time =  `${HH}:${MM}`
