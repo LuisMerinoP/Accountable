@@ -122,4 +122,3 @@ type Time =  `${HH}:${MM}`
 //   : never
 
 // type Result = ParseInt<"text0" | "text1" | "text2" | "text3" | "text4">;
-

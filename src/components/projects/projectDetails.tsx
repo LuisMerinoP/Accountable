@@ -26,9 +26,10 @@ const ProjectDetails = ( { project }: { project:IFirebaseProject } ) => {
       <div className="container section project-details">
         <div className="card z-depth-0">
           <div className="card-content">
-            <span className="card-title">{stateProject.title}</span>
+            <span className="card-title">Project details</span>
+            <span className="card-title">{'Title:' + stateProject.title}</span>
             <p>
-              {stateProject.content}
+              {'Content: ' + stateProject.content}
             </p>
           </div>
           <div className="card-action grey lighten-4">

@@ -30,7 +30,7 @@ export const signUp = (newUser: UserData) => {
       newUser.email,
       newUser.password
     ).then((resp) => {
-      resp.user?.updateProfile({displayName: newUser.firstName + ' ' +newUser.lastName})
+      resp.user?.updateProfile({displayName: newUser.firstName + ' ' + newUser.lastName})
       return firebase.firestore().collection('users').doc(resp.user?.uid).set({
         firstName: newUser.firstName,
         lastName: newUser.lastName,

@@ -1,6 +1,6 @@
 import ProjectSummary from './projectSummary';
 import { IFirebaseProject } from '../../store/types/projectTypes';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 
 const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }) => {
@@ -20,14 +20,14 @@ const ProjectList = ( { projects }: { projects: IFirebaseProject[] | undefined }
     <div className="col s12">
       <div className="project-list">
         { projects && projects.map( project => {
-          const path = '/project/' + project.id;
+          // const path = '/project/' + project.id;
           return (
             <div>
-              <Link to={{
+              {/* <Link to={{
                 pathname:path 
-                }} key={project.id}>
+                }} key={project.id}> */}
                 <ProjectSummary key={project.id} project={project} deleteCallback={projectDelete}/>
-              </Link>
+              {/* </Link> */}
             </div>
           )
         })}  
