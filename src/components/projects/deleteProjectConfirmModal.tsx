@@ -1,5 +1,4 @@
 import { BaseSyntheticEvent, useEffect, useRef } from "react";
-import { Link } from 'react-router-dom';
 import { IFirebaseProject } from './../../store/types/projectTypes'
 
 const DeleteConfirm = ( props : { project: IFirebaseProject, deleteCallback: (project: IFirebaseProject) => void }) => {
@@ -33,9 +32,7 @@ const DeleteConfirm = ( props : { project: IFirebaseProject, deleteCallback: (pr
         </div>
         <div className="modal-footer">
           <a href="#!" className="modal-close waves-effect waves-red btn-flat" onClick={onDeleteConfirmation}>OK</a>
-          <Link to='/'>
-            <a href="#!" className="modal-close waves-effect waves-green btn-flat">CANCEL</a>
-          </Link>
+          <a href="#!" className="modal-close waves-effect waves-green btn-flat">CANCEL</a>
         </div>
       </div>
     </div>
